@@ -1,0 +1,19 @@
+# Replace your-domain.com with your domain (A record must point at this VPS).
+# Serves the static site from the parent folder and proxies /api/* to the
+# Node auth API. TLS certificates are automatic via Let's Encrypt.
+
+your-domain.com {
+	root * /srv/site
+	encode gzip
+
+	# never expose the server code or its environment file
+	@blocked path /server* /js/auth.js.bak*
+	handle @blocked {
+		respond 404
+	}
+
+	@api path /api/*
+	reverse_proxy @api app:3000
+
+	file_server
+}

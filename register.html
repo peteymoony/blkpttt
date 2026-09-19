@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Blockpit | Create Account</title>
+    <meta name="robots" content="noindex">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="Sign up in less than a minute to automate your crypto taxes with Blockpit." name="description">
+    <meta content="Blockpit" property="og:site_name">
+    <meta content="website" property="og:type">
+    <meta content="Blockpit | Create Account" property="og:title">
+    <meta content="Sign up in less than a minute to automate your crypto taxes with Blockpit." property="og:description">
+    <meta content="summary_large_image" name="twitter:card">
+    <meta content="#2f6bed" name="theme-color">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --page-bg: #eef1f6;
+            --card-bg: #ffffff;
+            --input-bg: #e9edf4;
+            --input-placeholder: #99a1b3;
+            --btn-idle: #d9dee7;
+            --btn-idle-text: #3c4250;
+            --blue: #2f6bed;
+            --blue-dark: #2458c9;
+            --login-pill-bg: #e4eaf8;
+            --login-pill-text: #33415e;
+            --text-dark: #23283d;
+            --text-muted: #6b7286;
+            --line: #e3e7ee;
+            --divider-text: #a7afbd;
+        }
+
+        html {
+            -webkit-text-size-adjust: 100%;
+            font-size: 87.5%;
+        }
+
+        body {
+            font-family: 'Quicksand', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--page-bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        a {
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* ---------- Header ---------- */
+        .site-header {
+            background: #ffffff;
+            border-bottom: 1px solid #e8ebf1;
+            padding: 0 2rem;
+            height: 68px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .brand-mark {
+            width: 34px;
+            height: 34px;
+            background: #101425;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.25rem;
+            line-height: 1;
+            padding-bottom: 2px;
+        }
+
+        .header-divider {
+            width: 1px;
+            height: 28px;
+            background: #e3e7ee;
+        }
+
+        .main-nav {
+            display: flex;
+            gap: 2.25rem;
+        }
+
+        .main-nav a {
+            color: #333a45;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.02rem;
+        }
+
+        .main-nav a:hover {
+            color: #101425;
+            text-decoration: none;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.9rem;
+        }
+
+        .btn-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.65rem 1.7rem;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background-color .2s ease, filter .2s ease;
+        }
+
+        .btn-pill:hover {
+            text-decoration: none;
+            filter: brightness(.96);
+        }
+
+        .btn-pill-login {
+            background: var(--login-pill-bg);
+            color: var(--login-pill-text);
+        }
+
+        .btn-pill-signup {
+            background: var(--blue);
+            color: #ffffff;
+        }
+
+        /* ---------- Main / Card ---------- */
+        .auth-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 1.5rem;
+        }
+
+        .auth-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 12px 44px rgba(23, 32, 71, .10);
+            display: flex;
+            width: 100%;
+            max-width: 980px;
+            min-height: 620px;
+            overflow: hidden;
+        }
+
+        /* Left visual panel */
+        .card-visual {
+            flex: 1 1 50%;
+            background: linear-gradient(165deg, #131939 0%, #1d2a63 45%, #3050d0 100%);
+            border-radius: 20px 0 0 20px;
+            padding: 3rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            color: #ffffff;
+            text-align: center;
+            position: relative;
+        }
+
+        .visual-brand {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, .10);
+            border: 1px solid rgba(255, 255, 255, .14);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, .85);
+            font-weight: 700;
+            font-size: 1.4rem;
+            line-height: 1;
+            padding-bottom: 2px;
+            position: absolute;
+            top: 2.4rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .trusted-text {
+            font-size: 1.35rem;
+            font-weight: 600;
+            line-height: 1.55;
+            margin-top: 2rem;
+        }
+
+        .coin-cloud {
+            position: relative;
+            width: 100%;
+            max-width: 330px;
+            height: 260px;
+        }
+
+        .coin {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 18px rgba(5, 10, 40, .35);
+        }
+
+        .coin svg {
+            display: block;
+        }
+
+        .coin-kraken  { width: 58px; height: 58px; top: 2%;   left: 36%; }
+        .coin-btc     { width: 52px; height: 52px; top: 24%;  left: 12%; }
+        .coin-fox     { width: 50px; height: 50px; top: 22%;  left: 60%; }
+        .coin-sol     { width: 76px; height: 76px; top: 40%;  left: 30%; }
+        .coin-eth     { width: 56px; height: 56px; top: 42%;  left: 66%; }
+        .coin-near    { width: 44px; height: 44px; top: 62%;  left: 10%; }
+        .coin-cbase   { width: 56px; height: 56px; top: 76%;  left: 28%; }
+        .coin-phantom { width: 46px; height: 46px; top: 66%;  left: 56%; }
+        .coin-bnb     { width: 52px; height: 52px; top: 88%;  left: 46%; }
+
+        .trustpilot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .55rem;
+        }
+
+        .trustpilot-brand {
+            display: flex;
+            align-items: center;
+            gap: .45rem;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.15rem;
+        }
+
+        .trustpilot-stars {
+            display: flex;
+            gap: 3px;
+        }
+
+        .tp-star {
+            width: 26px;
+            height: 26px;
+            background: #00b67a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tp-star.half {
+            background: linear-gradient(90deg, #00b67a 50%, #dcdce4 50%);
+        }
+
+        .tp-star svg {
+            width: 17px;
+            height: 17px;
+            fill: #ffffff;
+        }
+
+        /* Right form panel */
+        .card-form {
+            flex: 1 1 50%;
+            padding: 3.5rem 3.5rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .card-form-inner {
+            max-width: 430px;
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .form-title {
+            font-size: 1.65rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: .6rem;
+        }
+
+        .form-subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 1.8rem;
+        }
+
+        .social-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: .8rem;
+            margin-bottom: 1.6rem;
+        }
+
+        .social-btn {
+            height: 58px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: border-color .2s ease, background-color .2s ease;
+            padding: 0;
+        }
+
+        .social-btn:hover {
+            border-color: #c6cedd;
+            background: #f7f9fc;
+        }
+
+        .social-btn svg {
+            width: 25px;
+            height: 25px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 0 0 1.5rem;
+            color: var(--divider-text);
+            font-size: .95rem;
+            font-weight: 600;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--line);
+        }
+
+        .divider span {
+            padding: 0 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.1rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1.05rem 1.15rem;
+            border: 2px solid transparent;
+            border-radius: 11px;
+            font-size: 1rem;
+            font-family: inherit;
+            font-weight: 500;
+            background: var(--input-bg);
+            color: var(--text-dark);
+            transition: border-color .2s ease, background-color .2s ease;
+        }
+
+        .form-input::placeholder {
+            color: var(--input-placeholder);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--blue);
+            background: #ffffff;
+        }
+
+        .password-wrap {
+            position: relative;
+        }
+
+        .password-wrap .form-input {
+            padding-right: 3.2rem;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #7a8398;
+            padding: .25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .password-toggle:hover {
+            color: #4a5468;
+        }
+
+        .terms-text {
+            font-size: .92rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin: 1.5rem 0 1.4rem;
+            line-height: 1.6;
+        }
+
+        /* Primary action — matches the "Get started" header button when active */
+        .btn-submit {
+            width: 100%;
+            padding: 1.05rem;
+            background: var(--btn-idle);
+            color: var(--btn-idle-text);
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background-color .2s ease, filter .2s ease;
+        }
+
+        .btn-submit:disabled {
+            cursor: not-allowed;
+        }
+
+        .btn-submit:not(:disabled) {
+            background: var(--blue);
+            color: #ffffff;
+        }
+
+        .btn-submit:not(:disabled):hover {
+            background: var(--blue-dark);
+        }
+
+        .btn-submit.is-loading {
+            opacity: .75;
+            pointer-events: none;
+        }
+
+        .switch-line {
+            margin-top: 1.4rem;
+            color: var(--text-muted);
+            font-size: .98rem;
+            font-weight: 500;
+        }
+
+        .sep-line {
+            border: none;
+            border-top: 1px solid var(--line);
+            margin: 1.6rem 0 1.2rem;
+        }
+
+        .advisory-link {
+            font-size: .98rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .advisory-link:hover {
+            color: var(--blue);
+        }
+
+        .form-message {
+            display: none;
+            margin-top: 1rem;
+            font-size: .92rem;
+            font-weight: 600;
+            color: #c0392b;
+        }
+
+        .form-message.show {
+            display: block;
+        }
+
+        /* ---------- Responsive ---------- */
+        @media (max-width: 960px) {
+            .auth-card {
+                max-width: 520px;
+                min-height: 0;
+            }
+
+            .card-visual {
+                display: none;
+            }
+
+            .card-form {
+                padding: 2.8rem 2.2rem 2.2rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .site-header {
+                padding: 0 1rem;
+            }
+
+            .header-divider,
+            .main-nav {
+                display: none;
+            }
+
+            .btn-pill {
+                padding: .55rem 1.15rem;
+                font-size: .92rem;
+            }
+
+            .card-form {
+                padding: 2.2rem 1.4rem 1.8rem;
+            }
+
+            .social-row {
+                gap: .55rem;
+            }
+
+            .social-btn {
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <a href="index.html" aria-label="Blockpit home"><div class="brand-mark">B</div></a>
+            <div class="header-divider"></div>
+            <nav class="main-nav">
+                <a href="index.html" data-i18n="navFeatures">Features</a>
+                <a href="pricing.html" data-i18n="navPricing">Pricing</a>
+                <a href="contact.html" data-i18n="navContact">Contact</a>
+            </nav>
+        </div>
+        <div class="header-actions">
+            <a href="login.html" class="btn-pill btn-pill-login" data-i18n="navLogin">Log In</a>
+            <a href="register.html" class="btn-pill btn-pill-signup" data-i18n="navSignup">Sign Up</a>
+        </div>
+    </header>
+
+    <main class="auth-main">
+        <div class="auth-card">
+            <aside class="card-visual" aria-hidden="true">
+                <div class="visual-brand">B</div>
+                <p class="trusted-text" data-i18n="trusted">Trusted by 300,000+<br>customers worldwide.</p>
+
+                <div class="coin-cloud">
+                    <!-- Kraken (official purple + kraken glyph) -->
+                    <div class="coin coin-kraken">
+                        <svg viewBox="0 0 58 58" width="58" height="58"><circle cx="29" cy="29" r="29" fill="#7132f5"/><path fill="#ffffff" d="M29 12c-7.7 0-13 4.4-13 11v21h5v-7.5a3 3 0 0 1 6 0V44h4v-7.5a3 3 0 0 1 6 0V44h4v-7.5a3 3 0 0 1 6 0V44h5V23c0-6.6-5.3-11-13-11z"/></svg>
+                    </div>
+                    <!-- Bitcoin (official) -->
+                    <div class="coin coin-btc">
+                        <svg viewBox="0 0 52 52" width="52" height="52"><circle cx="26" cy="26" r="26" fill="#f7931a"/><path fill="#ffffff" d="M35.7 23.1c.5-3.3-2-4.8-5.5-5.9l1.1-4.4-2.7-.7-1.1 4.3c-.7-.2-1.4-.3-2.1-.5l1.1-4.3-2.7-.7-1.1 4.4c-.6-.1-1.1-.2-1.6-.4l-3.7-.9-1.1 2.8s2 .5 2 .5c1.1.3 1.3 1 1.3 1.6l-3.2 12.7c-.1.4-.4 1-1.3.8 0 0-2-.5-2-.5l-1.4 3.2 3.5.9c.6.2 1.3.3 1.9.5l-1.1 4.4 2.7.7 1.1-4.4c.7.2 1.4.3 2.1.5l-1.1 4.4 2.7.7 1.1-4.4c4.6.9 8.1.5 9.6-3.6 1.2-3.1-.1-4.9-2.6-6.1 1.8-.4 3.2-1.6 3.6-4zm-6.5 8.7c-.8 3.3-6.5 1.5-8.3 1.1l1.5-5.9c1.8.5 7.7 1.4 6.8 4.8zm.8-8.7c-.8 3-5 1.4-6.4 1l1.3-5.3c1.4.4 5.9 1.1 5.1 4.3z"/></svg>
+                    </div>
+                    <!-- MetaMask (official fox colours) -->
+                    <div class="coin coin-fox">
+                        <svg viewBox="0 0 50 50" width="50" height="50"><circle cx="25" cy="25" r="25" fill="#1d232f"/><g><path d="M12.5 5.5l7.5 7-3.2 2.6-6-5.4z" fill="#e2761b"/><path d="M37.5 5.5l-7.5 7 3.2 2.6 6-5.4z" fill="#e2761b"/><path d="M13.8 7l5.4 5-2 1.6-4.4-4z" fill="#d7c1b3"/><path d="M36.2 7l-5.4 5 2 1.6 4.4-4z" fill="#d7c1b3"/><path d="M25 13.5L13 18.5l2.6 10.8L25 33.5l9.4-4.2L37 18.5z" fill="#e2761b"/><path d="M25 13.5l-5.5 5.5 5.5-1.8 5.5 1.8z" fill="#f6851b"/><circle cx="19.4" cy="23.4" r="1.9" fill="#233447"/><circle cx="30.6" cy="23.4" r="1.9" fill="#233447"/><path d="M20.6 27.2l4.4 2.6 4.4-2.6-1.6 3.4h-5.6z" fill="#f6851b"/><path d="M23.2 31.9l1.8 1.1 1.8-1.1-.5 2.1h-2.6z" fill="#c0ad9e"/></g></svg>
+                    </div>
+                    <!-- Solana (official gradient bars) -->
+                    <div class="coin coin-sol">
+                        <svg viewBox="0 0 76 76" width="76" height="76"><defs><linearGradient id="solGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9945ff"/><stop offset="1" stop-color="#14f195"/></linearGradient></defs><circle cx="38" cy="38" r="38" fill="url(#solGrad)"/><g fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"><path d="M23 29.5h30M23 38h30M23 46.5h30"/></g></svg>
+                    </div>
+                    <!-- Ethereum (official diamond) -->
+                    <div class="coin coin-eth">
+                        <svg viewBox="0 0 56 56" width="56" height="56"><circle cx="28" cy="28" r="28" fill="#627eea"/><g fill="#ffffff" transform="translate(8.5 13) scale(1.62)"><path d="M11.944 17.97L4.58 13.62 11.943 24l7.37-10.38-7.372 4.35h.003zM12.056 0L4.69 12.223l7.365 4.354 7.365-4.35L12.056 0z"/></g></svg>
+                    </div>
+                    <!-- NEAR (official) -->
+                    <div class="coin coin-near">
+                        <svg viewBox="0 0 44 44" width="44" height="44"><circle cx="22" cy="22" r="22" fill="#000000"/><g fill="#ffffff" transform="translate(10 10) scale(1)"><path d="M16.775 0c-.517 0-.994.266-1.264.704l-2.907 4.315a.309.309 0 0 0 .459.406l2.861-2.481a.115.115 0 0 1 .194.087v7.77a.116.116 0 0 1-.203.077L8.143 1.955a1.655 1.655 0 0 0-1.326-.652H1.49c-.818 0-1.484.666-1.484 1.484v12.622c0 .818.666 1.484 1.484 1.484.443 0 .867-.198 1.152-.541l2.908-3.638a.308.308 0 0 0-.463-.404l-2.847 2.459a.116.116 0 0 1-.194-.086V6.424c0-.104.126-.156.199-.082l8.594 9.622c.273.306.666.48 1.078.48h5.359c.818 0 1.484-.666 1.484-1.484V1.484c0-.818-.666-1.484-1.484-1.484z"/></g></svg>
+                    </div>
+                    <!-- Coinbase (official) -->
+                    <div class="coin coin-cbase">
+                        <svg viewBox="0 0 56 56" width="56" height="56"><circle cx="28" cy="28" r="28" fill="#0052ff"/><path fill="#ffffff" d="M28 40.5a12.5 12.5 0 1 1 0-25 12.5 12.5 0 0 1 0 25zm0-20.6a8.1 8.1 0 1 0 0 16.2 8.1 8.1 0 0 0 0-16.2z"/></svg>
+                    </div>
+                    <!-- Phantom (official ghost) -->
+                    <div class="coin coin-phantom">
+                        <svg viewBox="0 0 46 46" width="46" height="46"><circle cx="23" cy="23" r="23" fill="#ab9ff2"/><path fill="#ffffff" d="M23 6.5C14.4 6.5 7.5 13.4 7.5 22v15.6c0 1.6 1.9 2.5 3.1 1.4l2.3-2.1c.9-.8 2.2-.8 3.1 0l2.3 2.2c.9.9 2.3.9 3.2 0l2.3-2.2c.9-.8 2.2-.8 3.1 0l2.3 2.2c1.2 1.1 3.2.2 3.2-1.4V22c0-8.6-6.9-15.5-15.5-15.5z"/><circle cx="17.5" cy="21" r="2.1" fill="#ab9ff2"/><circle cx="28.5" cy="21" r="2.1" fill="#ab9ff2"/></svg>
+                    </div>
+                    <!-- Binance (official diamond) -->
+                    <div class="coin coin-bnb">
+                        <svg viewBox="0 0 52 52" width="52" height="52"><circle cx="26" cy="26" r="26" fill="#f0b90b"/><g fill="#ffffff" transform="translate(9.5 9.5) scale(1.4)"><path d="M12 0L7.4 4.6 9.9 7.2 12 5l2.1 2.1 2.5-2.6zM2.5 9.5L0 12l2.5 2.5L5 12zM9.9 16.8L12 19l2.1-2.2-2.5-2.5zm-7.4-4.6L7.4 16.8 12 12.2 16.6 16.8l4.9-4.9L24 12l-2.6-2.6-4.9 4.9L12 9.6 7.4 14.3z"/></g></svg>
+                    </div>
+                </div>
+
+                <div class="trustpilot">
+                    <div class="trustpilot-brand">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#00b67a"><path d="M17.227 16.67l2.19 6.742-7.413-5.388 5.223-1.354zM24 9.31h-9.165L12.005.589l-2.84 8.723L0 9.3l7.422 5.397-2.84 8.714 7.422-5.388 7.423 5.388-2.84-8.714z"/></svg>
+                        Trustpilot
+                    </div>
+                    <div class="trustpilot-stars">
+                        <div class="tp-star"><svg viewBox="0 0 24 24"><path d="M17.227 16.67l2.19 6.742-7.413-5.388 5.223-1.354zM24 9.31h-9.165L12.005.589l-2.84 8.723L0 9.3l7.422 5.397-2.84 8.714 7.422-5.388 7.423 5.388-2.84-8.714z"/></svg></div>
+                        <div class="tp-star"><svg viewBox="0 0 24 24"><path d="M17.227 16.67l2.19 6.742-7.413-5.388 5.223-1.354zM24 9.31h-9.165L12.005.589l-2.84 8.723L0 9.3l7.422 5.397-2.84 8.714 7.422-5.388 7.423 5.388-2.84-8.714z"/></svg></div>
+                        <div class="tp-star"><svg viewBox="0 0 24 24"><path d="M17.227 16.67l2.19 6.742-7.413-5.388 5.223-1.354zM24 9.31h-9.165L12.005.589l-2.84 8.723L0 9.3l7.422 5.397-2.84 8.714 7.422-5.388 7.423 5.388-2.84-8.714z"/></svg></div>
+                        <div class="tp-star"><svg viewBox="0 0 24 24"><path d="M17.227 16.67l2.19 6.742-7.413-5.388 5.223-1.354zM24 9.31h-9.165L12.005.589l-2.84 8.723L0 9.3l7.422 5.397-2.84 8.714 7.422-5.388 7.423 5.388-2.84-8.714z"/></svg></div>
+                        <div class="tp-star half"><svg viewBox="0 0 24 24"><path d="M17.227 16.67l2.19 6.742-7.413-5.388 5.223-1.354zM24 9.31h-9.165L12.005.589l-2.84 8.723L0 9.3l7.422 5.397-2.84 8.714 7.422-5.388 7.423 5.388-2.84-8.714z"/></svg></div>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="card-form">
+                <div class="card-form-inner">
+                    <h1 class="form-title" data-i18n="regTitle">Create Account</h1>
+                    <p class="form-subtitle" data-i18n="regSubtitle">Sign up in less than a minute to automate your crypto taxes.</p>
+
+                    <div class="social-row">
+                        <!-- Google (official) -->
+                        <button type="button" class="social-btn" data-provider="Google" aria-label="Continue with Google">
+                            <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                        </button>
+                        <!-- Apple (official) -->
+                        <button type="button" class="social-btn" data-provider="Apple" aria-label="Continue with Apple">
+                            <svg viewBox="0 0 24 24" fill="#000000"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.56-1.702"/></svg>
+                        </button>
+                        <!-- Blockpit (official app icon) -->
+                        <button type="button" class="social-btn" data-provider="Blockpit" aria-label="Continue with Blockpit">
+                            <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#101425"/><text x="12" y="17.2" text-anchor="middle" font-size="13.5" font-weight="700" fill="#4ade80" font-family="Quicksand, Arial, sans-serif">B</text></svg>
+                        </button>
+                        <!-- Coinbase (official) -->
+                        <button type="button" class="social-btn" data-provider="Coinbase" aria-label="Continue with Coinbase">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#0052ff"/><path fill="#ffffff" d="M12 18.5a6.5 6.5 0 1 1 0-13 6.5 6.5 0 0 1 0 13zm0-10.4a3.9 3.9 0 1 0 0 7.8 3.9 3.9 0 0 0 0-7.8z"/></svg>
+                        </button>
+                    </div>
+
+                    <div class="divider"><span data-i18n="orRegister">or register with email</span></div>
+
+                    <form id="registerForm" novalidate>
+                        <div class="form-group">
+                            <input class="form-input" type="email" id="email" name="email" data-i18n-ph="emailPh" placeholder="Email" autocomplete="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="password-wrap">
+                                <input class="form-input" type="password" id="password" name="password" data-i18n-ph="passwordPh" placeholder="Password" autocomplete="new-password" required>
+                                <button type="button" class="password-toggle" data-toggle-password aria-label="Show password">
+                                    <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <p class="terms-text" data-i18n="terms">Clicking 'Create Account' means that you agree to the Blockpit <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms &amp; Conditions</a></p>
+
+                        <button type="submit" class="btn-submit" id="submitBtn" data-i18n="createAccount" disabled>Create Account</button>
+                        <p class="form-message" id="formMessage" role="alert"></p>
+                    </form>
+
+                    <p class="switch-line"><span data-i18n="haveAccount">Already have an account?</span> <a href="login.html" data-i18n="logIn">Log In</a></p>
+
+                    <hr class="sep-line">
+
+                    <a href="expert-service.html" class="advisory-link" data-i18n="advisory">Switch to tax advisory registration</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script>
+        (function () {
+            /* ---------- i18n: shared with login.html ---------- */
+            var T = {
+                en: {
+                    navFeatures: 'Features', navPricing: 'Pricing', navContact: 'Contact',
+                    navLogin: 'Log In', navSignup: 'Sign Up',
+                    trusted: 'Trusted by 300,000+<br>customers worldwide.',
+                    regTitle: 'Create Account',
+                    regSubtitle: 'Sign up in less than a minute to automate your crypto taxes.',
+                    orRegister: 'or register with email',
+                    emailPh: 'Email', passwordPh: 'Password',
+                    terms: 'Clicking \'Create Account\' means that you agree to the Blockpit <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms &amp; Conditions</a>',
+                    createAccount: 'Create Account',
+                    haveAccount: 'Already have an account?', logIn: 'Log In',
+                    advisory: 'Switch to tax advisory registration',
+                    errRequired: 'Please fill in all fields.',
+                    errPasswordShort: 'Password must be at least 6 characters long.',
+                    errEmailInvalid: 'Please enter a valid email address.',
+                    busy: 'Please wait…',
+                    successRegister: 'Account created! Redirecting…',
+                    socialSoon: '{provider} sign-in will be available soon.'
+                },
+                de: {
+                    navFeatures: 'Funktionen', navPricing: 'Preise', navContact: 'Kontakt',
+                    navLogin: 'Anmelden', navSignup: 'Registrieren',
+                    trusted: 'Über 300.000 Kunden<br>weltweit vertrauen uns.',
+                    regTitle: 'Konto erstellen',
+                    regSubtitle: 'Registriere dich in weniger als einer Minute, um deine Krypto-Steuern zu automatisieren.',
+                    orRegister: 'oder mit E-Mail registrieren',
+                    emailPh: 'E-Mail', passwordPh: 'Passwort',
+                    terms: 'Mit Klick auf „Konto erstellen“ stimmst du der Blockpit-<a href="privacy.html">Datenschutzerklärung</a> und den <a href="terms.html">AGB</a> zu.',
+                    createAccount: 'Konto erstellen',
+                    haveAccount: 'Du hast bereits ein Konto?', logIn: 'Anmelden',
+                    advisory: 'Zur Registrierung für Steuerberatung wechseln',
+                    errRequired: 'Bitte fülle alle Felder aus.',
+                    errPasswordShort: 'Das Passwort muss mindestens 6 Zeichen lang sein.',
+                    errEmailInvalid: 'Bitte gib eine gültige E-Mail-Adresse ein.',
+                    busy: 'Bitte warten…',
+                    successRegister: 'Konto erstellt! Weiterleitung…',
+                    socialSoon: 'Die Anmeldung über {provider} ist bald verfügbar.'
+                },
+                it: {
+                    navFeatures: 'Funzioni', navPricing: 'Prezzi', navContact: 'Contatto',
+                    navLogin: 'Accedi', navSignup: 'Registrati',
+                    trusted: 'Scelto da oltre 300.000<br>clienti in tutto il mondo.',
+                    regTitle: 'Crea account',
+                    regSubtitle: 'Registrati in meno di un minuto per automatizzare le tue tasse crypto.',
+                    orRegister: 'oppure registrati con l\'email',
+                    emailPh: 'Email', passwordPh: 'Password',
+                    terms: 'Cliccando su \'Crea account\' accetti l\'<a href="privacy.html">Informativa sulla privacy</a> e i <a href="terms.html">Termini e condizioni</a> di Blockpit.',
+                    createAccount: 'Crea account',
+                    haveAccount: 'Hai già un account?', logIn: 'Accedi',
+                    advisory: 'Passa alla registrazione per consulenza fiscale',
+                    errRequired: 'Compila tutti i campi.',
+                    errPasswordShort: 'La password deve contenere almeno 6 caratteri.',
+                    errEmailInvalid: 'Inserisci un indirizzo email valido.',
+                    busy: 'Attendere…',
+                    successRegister: 'Account creato! Reindirizzamento…',
+                    socialSoon: 'L\'accesso con {provider} sarà presto disponibile.'
+                }
+            };
+
+            function detectLang() {
+                // 1. explicit ?lang= parameter (and persist it as the user's choice)
+                var m = /[?&]lang=([a-z]{2})(-[a-z]{2})?/i.exec(location.search);
+                if (m && T[m[1].toLowerCase()]) {
+                    try { localStorage.setItem('blockpit-lang', m[1].toLowerCase()); } catch (e) {}
+                    return m[1].toLowerCase();
+                }
+                // 2. the language page the user came from
+                var ref = document.referrer || '';
+                if (/de-(de|at|ch)/i.test(ref)) return 'de';
+                if (/(\/it\.html|\/it\/)/i.test(ref)) return 'it';
+                if (/(index\.html|blockpit\.io\/?$)/i.test(ref)) return 'en';
+                // 3. a language the user explicitly chose earlier
+                try {
+                    var saved = localStorage.getItem('blockpit-lang');
+                    if (saved && T[saved]) return saved;
+                } catch (e) {}
+                // 4. browser language
+                var nav = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+                if (nav.indexOf('de') === 0) return 'de';
+                if (nav.indexOf('it') === 0) return 'it';
+                return 'en';
+            }
+
+            var lang = detectLang();
+            var dict = T[lang];
+            document.documentElement.lang = lang === 'en' ? 'en' : (lang === 'de' ? 'de' : 'it');
+
+            function applyI18n() {
+                document.querySelectorAll('[data-i18n]').forEach(function (el) {
+                    var k = el.getAttribute('data-i18n');
+                    if (dict[k] !== undefined) el.innerHTML = dict[k];
+                });
+                document.querySelectorAll('[data-i18n-ph]').forEach(function (el) {
+                    var k = el.getAttribute('data-i18n-ph');
+                    if (dict[k] !== undefined) el.placeholder = dict[k];
+                });
+            }
+            applyI18n();
+
+            /* ---------- Password visibility toggle ---------- */
+            document.querySelectorAll('[data-toggle-password]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var input = btn.parentElement.querySelector('input');
+                    var show = input.type === 'password';
+                    input.type = show ? 'text' : 'password';
+                    btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+                });
+            });
+
+            /* ---------- Social provider buttons ---------- */
+            var message = document.getElementById('formMessage');
+            function showMessage(text, isError) {
+                message.textContent = text;
+                message.style.color = isError ? '#c0392b' : '#1e9e5a';
+                message.classList.add('show');
+            }
+            document.querySelectorAll('.social-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    showMessage(dict.socialSoon.replace('{provider}', btn.getAttribute('data-provider')), false);
+                });
+            });
+
+            /* ---------- Submit button state (grey → blue like "Get started") ---------- */
+            var form = document.getElementById('registerForm');
+            var submitBtn = document.getElementById('submitBtn');
+            var emailInput = document.getElementById('email');
+            var passwordInput = document.getElementById('password');
+
+            function refreshButton() {
+                var valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())
+                    && passwordInput.value.length >= BlockpitAuth.MIN_PASSWORD_LENGTH;
+                submitBtn.disabled = !valid;
+            }
+            emailInput.addEventListener('input', refreshButton);
+            passwordInput.addEventListener('input', refreshButton);
+            refreshButton();
+
+            /* ---------- Registration (Firebase or demo fallback) ---------- */
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                var email = emailInput.value.trim();
+                var password = passwordInput.value;
+
+                if (!email || !password) {
+                    showMessage(dict.errRequired, true);
+                    return;
+                }
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    showMessage(dict.errEmailInvalid, true);
+                    return;
+                }
+                if (password.length < BlockpitAuth.MIN_PASSWORD_LENGTH) {
+                    showMessage(dict.errPasswordShort, true);
+                    return;
+                }
+
+                submitBtn.classList.add('is-loading');
+                submitBtn.textContent = dict.busy;
+
+                BlockpitAuth.signIn(email, password).then(function () {
+                    showMessage(dict.successRegister, false);
+                    setTimeout(function () { window.location.href = 'setup.html'; }, 700);
+                }).catch(function (err) {
+                    submitBtn.classList.remove('is-loading');
+                    submitBtn.textContent = dict.createAccount;
+                    var code = err && err.code;
+                    if (code === 'invalid-email') showMessage(dict.errEmailInvalid, true);
+                    else if (code === 'weak-password') showMessage(dict.errPasswordShort, true);
+                    else if (code === 'network') showMessage(lang === 'de' ? 'Netzwerkfehler. Bitte versuche es erneut.' : (lang === 'it' ? 'Errore di rete. Riprova.' : 'Network error. Please try again.'), true);
+                    else showMessage(lang === 'de' ? 'Registrierung fehlgeschlagen. Bitte versuche es erneut.' : (lang === 'it' ? 'Registrazione non riuscita. Riprova.' : 'Registration failed. Please try again.'), true);
+                });
+            });
+
+            /* Already signed in? Go straight through. */
+            if (BlockpitAuth.getSession) {
+                BlockpitAuth.getSession().then(function (user) {
+                    if (user) window.location.href = 'setup.html';
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

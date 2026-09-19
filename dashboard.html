@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Blockpit</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/favicon.ico">
+<style>
+    :root {
+        --blue: #2f6bed;
+        --green: #56b948;
+        --bg: #f4f5f7;
+        --card: #ffffff;
+        --border: #e8ebf0;
+        --text: #191c28;
+        --muted: #6b7280;
+        --teal: #35b3aa;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+    }
+    .app { display: flex; min-height: 100vh; }
+
+    /* ---------------- Sidebar ---------------- */
+    .sidebar {
+        width: 64px;
+        flex: 0 0 64px;
+        background: #fff;
+        border-right: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 14px 0;
+        gap: 6px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+    }
+    .s-item {
+        width: 44px; height: 44px;
+        display: flex; align-items: center; justify-content: center;
+        border: none; background: transparent;
+        color: #3c4152;
+        cursor: pointer;
+        border-radius: 12px;
+        transition: background .15s, color .15s;
+    }
+    .s-item:hover { background: #f1f3f7; }
+    .s-item.active { color: var(--blue); }
+    .s-logo {
+        font-size: 1.7rem; font-weight: 900; color: #111;
+        letter-spacing: -.04em;
+        width: 44px; height: 44px;
+        display: flex; align-items: center; justify-content: center;
+        user-select: none;
+    }
+    .s-sep { width: 28px; border-top: 1px solid var(--border); margin: 6px 0; }
+    .s-spacer { flex: 1; }
+    .s-plus {
+        background: var(--teal);
+        color: #fff;
+        font-weight: 800;
+        font-size: .82rem;
+        border-radius: 9px;
+        width: 46px; height: 26px;
+        display: flex; align-items: center; justify-content: center;
+        letter-spacing: .02em;
+        cursor: pointer;
+        border: none;
+    }
+
+    /* ---------------- Main ---------------- */
+    .main {
+        flex: 1;
+        min-width: 0;
+        padding: 22px 26px 60px;
+        max-width: 1560px;
+    }
+    .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
+    }
+
+    /* Total Net Worth */
+    .networth {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 26px 30px;
+        margin-bottom: 18px;
+    }
+    .nw-left { display: flex; align-items: center; gap: 12px; }
+    .nw-title { font-size: 1.45rem; font-weight: 800; letter-spacing: -.01em; }
+    .nw-ico {
+        width: 34px; height: 34px;
+        border-radius: 10px;
+        background: #eef3fe;
+        color: var(--blue);
+        display: flex; align-items: center; justify-content: center;
+    }
+    .nw-eye {
+        width: 34px; height: 34px;
+        border: none; background: transparent;
+        color: #9aa2b1; cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 10px;
+    }
+    .nw-eye:hover { background: #f1f3f7; color: var(--text); }
+    .nw-toggle { display: flex; gap: 22px; }
+    .nw-cur {
+        border: none; background: transparent;
+        font-family: inherit;
+        font-size: 1.02rem; font-weight: 700;
+        color: #3c4152;
+        cursor: pointer;
+        padding: 6px 2px;
+    }
+    .nw-cur.active { color: var(--blue); }
+
+    /* Tabs */
+    .tabs {
+        display: flex;
+        margin-bottom: 18px;
+        overflow: hidden;
+    }
+    .tab {
+        flex: 1;
+        display: flex; align-items: center; justify-content: center;
+        gap: 10px;
+        padding: 20px 10px;
+        border: none;
+        background: transparent;
+        font-family: inherit;
+        font-size: 1.02rem;
+        font-weight: 600;
+        color: #3c4152;
+        cursor: pointer;
+        border-bottom: 2.5px solid transparent;
+        transition: color .15s;
+    }
+    .tab + .tab { border-left: 1px solid var(--border); }
+    .tab:hover { color: var(--text); }
+    .tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+    /* Welcome */
+    .welcome { padding: 26px 30px; margin-bottom: 18px; }
+    .w-head { display: flex; align-items: center; justify-content: space-between; }
+    .w-title { font-size: 1.3rem; font-weight: 800; }
+    .w-close {
+        width: 34px; height: 34px;
+        border: none; background: transparent;
+        font-size: 1.5rem; color: #6b7280;
+        cursor: pointer; border-radius: 10px;
+        line-height: 1;
+    }
+    .w-close:hover { background: #f1f3f7; color: var(--text); }
+    .w-text { margin-top: 14px; font-size: 1.04rem; line-height: 1.65; color: #2a2e3d; max-width: 900px; }
+    .w-text p + p { margin-top: 10px; }
+
+    /* ---------------- Blurred content zone ---------------- */
+    .zone { position: relative; border-radius: 16px; }
+    .zone-inner { filter: blur(9px); opacity: .75; pointer-events: none; user-select: none; }
+    .zone-pad { display: grid; gap: 18px; }
+
+    /* Tutorial card (recreated look) */
+    .tutorial {
+        background: linear-gradient(160deg, #101223 0%, #171a35 55%, #10132b 100%);
+        border-radius: 16px;
+        padding: 54px 30px 60px;
+        display: flex; flex-direction: column; align-items: center;
+        color: #fff;
+        min-height: 380px;
+        justify-content: center;
+        gap: 26px;
+    }
+    .t-brand {
+        display: flex; align-items: center; gap: 18px;
+        color: rgba(255,255,255,.85);
+        font-size: 1.05rem; font-weight: 600; letter-spacing: .02em;
+    }
+    .t-brand .line { width: 150px; height: 1px; background: rgba(255,255,255,.35); }
+    .t-title { font-size: 2.6rem; font-weight: 800; letter-spacing: -.02em; }
+    .t-sub { font-size: 1.35rem; color: rgba(255,255,255,.55); font-weight: 600; }
+
+    /* Skeletons */
+    .sk-row { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 18px; }
+    .sk-card {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 24px;
+        min-height: 220px;
+    }
+    .sk-bar { height: 14px; border-radius: 7px; background: #edf0f5; margin-bottom: 14px; }
+    .sk-bar.w60 { width: 60%; } .sk-bar.w40 { width: 40%; } .sk-bar.w80 { width: 80%; }
+    .sk-chart {
+        margin-top: 18px; height: 120px; border-radius: 12px;
+        background: linear-gradient(180deg, #eef3fe 0%, #f6f8fc 100%);
+        position: relative; overflow: hidden;
+    }
+    .sk-chart svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    /* Loading overlay */
+    .overlay {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: 18px;
+        background: rgba(244, 245, 247, .55);
+        border-radius: 16px;
+        z-index: 5;
+        text-align: center;
+        padding: 20px;
+    }
+    .ov-spinner {
+        width: 46px; height: 46px;
+        border: 4.5px solid rgba(47, 107, 237, .15);
+        border-top-color: var(--blue);
+        border-radius: 50%;
+        animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .ov-text { font-size: 1.05rem; font-weight: 600; color: #2a2e3d; }
+    .ov-sub { font-size: .9rem; color: var(--muted); margin-top: -10px; }
+    .ov-retry {
+        margin-top: 6px;
+        padding: .85rem 2.2rem;
+        border: 1.8px solid var(--blue);
+        border-radius: 999px;
+        background: #fff;
+        color: var(--blue);
+        font-family: inherit;
+        font-size: 1.02rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background .15s;
+    }
+    .ov-retry:hover { background: #eef3fe; }
+
+    /* Chat */
+    .chat-fab {
+        position: fixed; right: 26px; bottom: 26px;
+        width: 62px; height: 62px;
+        border-radius: 50%;
+        border: none;
+        background: var(--blue);
+        color: #fff;
+        cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 10px 26px -8px rgba(47, 107, 237, .55);
+        z-index: 100;
+    }
+    .chat-fab .dot {
+        position: absolute; top: 3px; right: 5px;
+        width: 13px; height: 13px;
+        background: #e5484d;
+        border-radius: 50%;
+        border: 2.5px solid #fff;
+    }
+    .chat-panel {
+        position: fixed; right: 26px; bottom: 102px;
+        width: 340px; max-width: calc(100vw - 40px);
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        box-shadow: 0 24px 60px -18px rgba(16, 24, 40, .28);
+        overflow: hidden;
+        z-index: 100;
+        display: none;
+    }
+    .chat-panel.open { display: block; }
+    .chat-header {
+        display: flex; align-items: center; gap: 12px;
+        padding: 16px 18px;
+        background: #101223; color: #fff;
+    }
+    .chat-avatar {
+        width: 36px; height: 36px; border-radius: 50%;
+        background: var(--blue);
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 800;
+    }
+    .chat-name { font-weight: 700; font-size: .95rem; display: flex; align-items: center; gap: 7px; }
+    .chat-status { font-size: .78rem; color: rgba(255,255,255,.65); }
+    .chat-status-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; display: inline-block; }
+    .chat-close { margin-left: auto; background: transparent; border: none; color: rgba(255,255,255,.75); font-size: 1.4rem; cursor: pointer; line-height: 1; }
+    .chat-body { padding: 18px; min-height: 150px; max-height: 260px; overflow-y: auto; background: #f7f8fa; }
+    .chat-msg { max-width: 82%; padding: 10px 14px; border-radius: 14px; font-size: .9rem; line-height: 1.45; margin-bottom: 10px; }
+    .chat-msg.bot { background: #fff; border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+    .chat-foot { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--border); }
+    .chat-foot input { flex: 1; border: 1px solid var(--border); border-radius: 999px; padding: 10px 16px; font-family: inherit; font-size: .9rem; outline: none; }
+    .chat-foot input:focus { border-color: var(--blue); }
+    .chat-foot button { border: none; background: var(--blue); color: #fff; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex: 0 0 40px; }
+
+    @media (max-width: 900px) {
+        .sk-row { grid-template-columns: 1fr; }
+        .t-title { font-size: 1.9rem; }
+        .main { padding: 16px 14px 60px; }
+    }
+</style>
+</head>
+<body>
+<div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <button class="s-item" title="Collapse" aria-label="Collapse">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5l7 7-7 7"/><path d="M13 5l7 7-7 7"/></svg>
+        </button>
+        <div class="s-logo">B</div>
+        <div class="s-sep"></div>
+        <button class="s-item" title="Sync" aria-label="Sync">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg>
+        </button>
+        <button class="s-item active" title="Portfolio" aria-label="Portfolio">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/><path d="M2 3h3l2.6 12.5a2 2 0 0 0 2 1.5h8.7a2 2 0 0 0 2-1.6L22 7H6"/></svg>
+        </button>
+        <button class="s-item" title="Wallets" aria-label="Wallets">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H5a2 2 0 0 1 0-4h13v4"/><path d="M20 7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5"/><circle cx="16.5" cy="13.5" r="1.3" fill="currentColor" stroke="none"/></svg>
+        </button>
+        <button class="s-item" title="Transactions" aria-label="Transactions">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19"/></svg>
+        </button>
+        <button class="s-item" title="Favorites" aria-label="Favorites">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5S3.5 15.5 3.5 9.6A4.6 4.6 0 0 1 12 6.9a4.6 4.6 0 0 1 8.5 2.7c0 5.9-8.5 10.9-8.5 10.9z"/></svg>
+        </button>
+        <button class="s-item" title="Send" aria-label="Send">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </button>
+        <button class="s-item" title="Share" aria-label="Share">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="6" r="2.6"/><circle cx="18" cy="18" r="2.6"/><path d="M8.3 10.8l7.4-3.6M8.3 13.2l7.4 3.6"/></svg>
+        </button>
+        <div class="s-spacer"></div>
+        <button class="s-plus" title="Blockpit Plus">Plus</button>
+        <button class="s-item" title="More" aria-label="More" style="margin-top:6px;">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>
+        </button>
+        <div class="s-sep"></div>
+        <button class="s-item" title="Log out" aria-label="Log out" id="logoutBtn">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4"/><path d="M11 8l-4 4 4 4M7 12h10"/></svg>
+        </button>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+        <!-- Total Net Worth -->
+        <section class="card networth">
+            <div class="nw-left">
+                <span class="nw-title" data-i18n="nwTitle">Total Net Worth</span>
+                <span class="nw-ico">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5.5-5.5 4 4L21 7"/><path d="M15 7h6v6"/></svg>
+                </span>
+                <button class="nw-eye" id="nwEye" aria-label="Toggle balance visibility">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/></svg>
+                </button>
+            </div>
+            <div class="nw-toggle">
+                <button class="nw-cur active" data-cur="usd">USD</button>
+                <button class="nw-cur" data-cur="btc">BTC</button>
+            </div>
+        </section>
+
+        <!-- Tabs -->
+        <nav class="card tabs">
+            <button class="tab active" data-tab="performance">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5.5-5.5 4 4L21 7"/><path d="M15 7h6v6"/></svg>
+                <span data-i18n="tabPerformance">Performance</span>
+            </button>
+            <button class="tab" data-tab="holdings">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="8" ry="2.8"/><path d="M4 5.5v6c0 1.6 3.6 2.8 8 2.8s8-1.2 8-2.8v-6"/><path d="M4 11.5v6c0 1.6 3.6 2.8 8 2.8s8-1.2 8-2.8v-6"/></svg>
+                <span data-i18n="tabHoldings">Holdings</span>
+            </button>
+            <button class="tab" data-tab="integrations">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M16 7V5.5A2.5 2.5 0 0 0 13.5 3h-3A2.5 2.5 0 0 0 8 5.5V7"/></svg>
+                <span data-i18n="tabIntegrations">Integrations</span>
+            </button>
+            <button class="tab" data-tab="nfts">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l9 5v10l-9 5-9-5V7l9-5z"/><path d="M12 22V12"/><path d="M3 7l9 5 9-5"/></svg>
+                <span data-i18n="tabNfts">NFTs</span>
+            </button>
+            <button class="tab" data-tab="insights">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
+                <span data-i18n="tabInsights">Insights</span>
+            </button>
+        </nav>
+
+        <!-- Welcome -->
+        <section class="card welcome" id="welcomeCard">
+            <div class="w-head">
+                <h2 class="w-title"><span data-i18n="welcomeTitle">✨ Welcome to Blockpit!</span></h2>
+                <button class="w-close" id="welcomeClose" aria-label="Close">&times;</button>
+            </div>
+            <div class="w-text">
+                <p data-i18n="welcomeP1">Say goodbye to complexity, hello to simplified calculations, accurate reports, and compliance peace of mind.</p>
+                <p data-i18n="welcomeP2">Great to have you on board!</p>
+            </div>
+        </section>
+
+        <!-- Content zone: blurred + loading -->
+        <section class="zone" id="zone">
+            <div class="zone-inner zone-pad" id="zoneInner">
+                <!-- Tutorial card -->
+                <div class="tutorial">
+                    <div class="t-brand">
+                        <span class="line"></span>
+                        <span>Blockpit</span>
+                        <span class="line"></span>
+                    </div>
+                    <div class="t-title" data-i18n="tutTitle">How to get started</div>
+                    <div class="t-sub" data-i18n="tutSub">Tutorial</div>
+                </div>
+                <!-- Skeleton dashboard content -->
+                <div class="sk-row">
+                    <div class="sk-card">
+                        <div class="sk-bar w40"></div>
+                        <div class="sk-bar w80"></div>
+                        <div class="sk-chart">
+                            <svg viewBox="0 0 400 120" preserveAspectRatio="none">
+                                <path d="M0,90 C40,80 60,95 100,70 C140,45 170,60 210,50 C250,40 280,55 320,30 C350,15 380,25 400,18 L400,120 L0,120 Z" fill="rgba(47,107,237,.10)"/>
+                                <path d="M0,90 C40,80 60,95 100,70 C140,45 170,60 210,50 C250,40 280,55 320,30 C350,15 380,25 400,18" fill="none" stroke="#2f6bed" stroke-width="2.5"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="sk-card">
+                        <div class="sk-bar w60"></div>
+                        <div class="sk-bar w80"></div>
+                        <div class="sk-bar w40"></div>
+                        <div class="sk-bar w60"></div>
+                    </div>
+                    <div class="sk-card">
+                        <div class="sk-bar w40"></div>
+                        <div class="sk-bar w60"></div>
+                        <div class="sk-bar w80"></div>
+                        <div class="sk-bar w40"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="overlay" id="zoneOverlay">
+                <div class="ov-spinner" id="ovSpinner"></div>
+                <svg class="ov-error" id="ovError" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#b3261e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="10"/><path d="M12 7.5v5.5"/><path d="M12 16.5h.01"/></svg>
+                <p class="ov-text" id="ovText"></p>
+                <p class="ov-sub" id="ovSub" style="display:none;"></p>
+                <button class="ov-retry" id="ovRetry" data-i18n="retryHour">Retry in an hour</button>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- Chat -->
+<button class="chat-fab" id="chatFab" aria-label="Support chat">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8.5 8.5 0 0 1-8.5 8.5c-1.5 0-3-.4-4.2-1.1L3 21l1.6-5.3A8.5 8.5 0 1 1 21 12z"/></svg>
+    <span class="dot"></span>
+</button>
+<div class="chat-panel" id="chatPanel" role="dialog" aria-label="Live chat">
+    <div class="chat-header">
+        <div class="chat-avatar">B</div>
+        <div>
+            <div class="chat-name"><span data-i18n="chatName">Blockpit Support</span> <span class="chat-status-dot"></span></div>
+            <div class="chat-status" data-i18n="chatStatus">Typically replies in a few minutes</div>
+        </div>
+        <button class="chat-close" id="chatClose" aria-label="Close chat">&times;</button>
+    </div>
+    <div class="chat-body" id="chatBody">
+        <div class="chat-msg bot" data-i18n="chatHello">Hi! How can we help you today?</div>
+    </div>
+    <div class="chat-foot">
+        <input type="text" id="chatInput" data-i18n-ph="chatPh" placeholder="Write a message…">
+        <button id="chatSend" aria-label="Send">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </button>
+    </div>
+</div>
+
+<script>
+(function () {
+    /* ---------------- i18n ---------------- */
+    var T = {
+        en: {
+            nwTitle: 'Total Net Worth',
+            tabPerformance: 'Performance', tabHoldings: 'Holdings', tabIntegrations: 'Integrations',
+            tabNfts: 'NFTs', tabInsights: 'Insights',
+            welcomeTitle: '✨ Welcome to Blockpit!',
+            welcomeP1: 'Say goodbye to complexity, hello to simplified calculations, accurate reports, and compliance peace of mind.',
+            welcomeP2: 'Great to have you on board!',
+            tutTitle: 'How to get started', tutSub: 'Tutorial',
+            loading: 'Loading your data…',
+            loadingSub: 'This can take a few minutes.',
+            stillWorking: 'Still working on it…',
+            retryHour: 'Retry in an hour',
+            loadFail: 'We couldn’t load your data. The import failed — please retry in an hour.',
+            chatName: 'Blockpit Support', chatStatus: 'Typically replies in a few minutes',
+            chatHello: 'Hi! How can we help you today?',
+            chatPh: 'Write a message…',
+            chatReply: 'Thanks for reaching out! Our team will get back to you shortly.'
+        },
+        de: {
+            nwTitle: 'Gesamtnettovermögen',
+            tabPerformance: 'Performance', tabHoldings: 'Bestände', tabIntegrations: 'Integrationen',
+            tabNfts: 'NFTs', tabInsights: 'Insights',
+            welcomeTitle: '✨ Willkommen bei Blockpit!',
+            welcomeP1: 'Verabschiede dich von Komplexität — hallo zu vereinfachten Berechnungen, genauen Reports und Compliance ohne Sorgen.',
+            welcomeP2: 'Schön, dass du an Bord bist!',
+            tutTitle: 'Erste Schritte', tutSub: 'Tutorial',
+            loading: 'Deine Daten werden geladen…',
+            loadingSub: 'Das kann ein paar Minuten dauern.',
+            stillWorking: 'Wir arbeiten noch daran…',
+            retryHour: 'In einer Stunde erneut versuchen',
+            loadFail: 'Wir konnten deine Daten nicht laden. Der Import ist fehlgeschlagen — bitte versuche es in einer Stunde erneut.',
+            chatName: 'Blockpit Support', chatStatus: 'Antwortet meist innerhalb weniger Minuten',
+            chatHello: 'Hi! Wie können wir dir helfen?',
+            chatPh: 'Nachricht schreiben…',
+            chatReply: 'Danke für deine Nachricht! Unser Team meldet sich in Kürze bei dir.'
+        },
+        it: {
+            nwTitle: 'Patrimonio netto totale',
+            tabPerformance: 'Performance', tabHoldings: 'Possedimenti', tabIntegrations: 'Integrazioni',
+            tabNfts: 'NFTs', tabInsights: 'Insights',
+            welcomeTitle: '✨ Benvenuto in Blockpit!',
+            welcomeP1: 'Dì addio alla complessità: calcoli semplificati, report accurati e tranquillità in materia di conformità.',
+            welcomeP2: 'Felici di averti a bordo!',
+            tutTitle: 'Come iniziare', tutSub: 'Tutorial',
+            loading: 'Caricamento dei dati…',
+            loadingSub: 'Può richiedere alcuni minuti.',
+            stillWorking: 'Ci stiamo ancora lavorando…',
+            retryHour: 'Riprova tra un’ora',
+            loadFail: 'Non siamo riusciti a caricare i tuoi dati. L’importazione non è riuscita — riprova tra un’ora.',
+            chatName: 'Blockpit Support', chatStatus: 'Di solito risponde in pochi minuti',
+            chatHello: 'Ciao! Come possiamo aiutarti?',
+            chatPh: 'Scrivi un messaggio…',
+            chatReply: 'Grazie per averci contattato! Il nostro team ti risponderà a breve.'
+        }
+    };
+
+    function detectLang() {
+        try {
+            var p = new URLSearchParams(window.location.search).get('lang');
+            if (p) { localStorage.setItem('blockpit-lang', p); return norm(p); }
+        } catch (e) {}
+        try {
+            if (document.referrer) {
+                var u = new URL(document.referrer);
+                var rp = u.searchParams.get('lang');
+                if (rp) return norm(rp);
+            }
+        } catch (e) {}
+        try {
+            var s = localStorage.getItem('blockpit-lang');
+            if (s) return norm(s);
+        } catch (e) {}
+        return norm(navigator.language || 'en');
+    }
+    function norm(l) { l = (l || 'en').toLowerCase(); if (l.indexOf('de') === 0) return 'de'; if (l.indexOf('it') === 0) return 'it'; return 'en'; }
+
+    var lang = detectLang();
+    var dict = T[lang];
+    document.documentElement.lang = lang;
+
+    function applyI18n() {
+        document.querySelectorAll('[data-i18n]').forEach(function (el) {
+            var k = el.getAttribute('data-i18n');
+            if (dict[k] !== undefined) el.innerHTML = dict[k];
+        });
+        document.querySelectorAll('[data-i18n-ph]').forEach(function (el) {
+            var k = el.getAttribute('data-i18n-ph');
+            if (dict[k] !== undefined) el.placeholder = dict[k];
+        });
+    }
+    applyI18n();
+
+    /* ---------------- Currency toggle ---------------- */
+    document.querySelectorAll('.nw-cur').forEach(function (b) {
+        b.addEventListener('click', function () {
+            document.querySelectorAll('.nw-cur').forEach(function (x) { x.classList.remove('active'); });
+            b.classList.add('active');
+        });
+    });
+
+    /* ---------------- Tabs ---------------- */
+    document.querySelectorAll('.tab').forEach(function (t) {
+        t.addEventListener('click', function () {
+            document.querySelectorAll('.tab').forEach(function (x) { x.classList.remove('active'); });
+            t.classList.add('active');
+        });
+    });
+
+    /* ---------------- Welcome close ---------------- */
+    document.getElementById('welcomeClose').addEventListener('click', function () {
+        var w = document.getElementById('welcomeCard');
+        w.style.transition = 'opacity .25s, transform .25s';
+        w.style.opacity = '0';
+        w.style.transform = 'translateY(-6px)';
+        setTimeout(function () { w.style.display = 'none'; }, 260);
+    });
+
+    /* ---------------- Loading zone: 5 min, then retry-in-an-hour ---------------- */
+    var ovText = document.getElementById('ovText');
+    var ovSub = document.getElementById('ovSub');
+    var ovSpinner = document.getElementById('ovSpinner');
+    var ovError = document.getElementById('ovError');
+    var ovRetry = document.getElementById('ovRetry');
+    var FIVE_MIN = 5 * 60 * 1000;
+
+    function startLoadingCycle() {
+        ovRetry.style.display = 'none';
+        ovError.style.display = 'none';
+        ovSpinner.style.display = '';
+        ovText.classList.remove('failed');
+        ovText.textContent = dict.loading;
+        ovSub.textContent = dict.loadingSub;
+        ovSub.style.display = '';
+
+        // at ~2.5 min swap the sub-line to "still working…"
+        midTimer = setTimeout(function () { ovSub.textContent = dict.stillWorking; }, FIVE_MIN / 2);
+
+        // after 5 min the import fails — offer "Retry in an hour" as the solution
+        mainTimer = setTimeout(function () {
+            ovSpinner.style.display = 'none';
+            ovError.style.display = '';
+            ovSub.style.display = 'none';
+            ovText.classList.add('failed');
+            ovText.textContent = dict.loadFail;
+            ovRetry.style.display = '';
+        }, FIVE_MIN);
+    }
+    var midTimer, mainTimer;
+    startLoadingCycle();
+
+    ovRetry.addEventListener('click', function () {
+        clearTimeout(midTimer);
+        clearTimeout(mainTimer);
+        startLoadingCycle();
+    });
+
+    /* ---------------- Chat ---------------- */
+    var panel = document.getElementById('chatPanel');
+    document.getElementById('chatFab').addEventListener('click', function () {
+        panel.classList.toggle('open');
+    });
+    document.getElementById('chatClose').addEventListener('click', function () {
+        panel.classList.remove('open');
+    });
+    var chatBody = document.getElementById('chatBody');
+    var chatInput = document.getElementById('chatInput');
+    function sendChat() {
+        var v = chatInput.value.trim();
+        if (!v) return;
+        var m = document.createElement('div');
+        m.className = 'chat-msg';
+        m.style.cssText = 'background:#2f6bed;color:#fff;margin-left:auto;border-bottom-right-radius:4px;';
+        m.textContent = v;
+        chatBody.appendChild(m);
+        chatInput.value = '';
+        chatBody.scrollTop = chatBody.scrollHeight;
+        setTimeout(function () {
+            var r = document.createElement('div');
+            r.className = 'chat-msg bot';
+            r.textContent = dict.chatReply;
+            chatBody.appendChild(r);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }, 900);
+    }
+    document.getElementById('chatSend').addEventListener('click', sendChat);
+    chatInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') sendChat(); });
+
+    /* ---------------- Logout ---------------- */
+    document.getElementById('logoutBtn').addEventListener('click', function () {
+        window.location.href = 'index.html';
+    });
+})();
+</script>
+</body>
+</html>
